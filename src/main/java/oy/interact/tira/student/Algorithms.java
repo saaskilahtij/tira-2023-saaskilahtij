@@ -1,5 +1,6 @@
 package oy.interact.tira.student;
 
+import java.io.Console;
 import java.util.Comparator;
 
 public class Algorithms {
@@ -13,7 +14,27 @@ public class Algorithms {
    ///////////////////////////////////////////
 
    public static <T extends Comparable<T>> void insertionSort(T[] array) {
-      // TODO: Student, implement this.
+    
+    // TODO: NULL CHECK!!
+
+    // Loops all elements in the array
+    for (int i = 1; i < array.length; i++) {
+      // Sets the current value to temp
+      T temp = array[i];
+      // Sets the index of the comparable value
+      int j = i - 1;
+
+      // Loops through the organized part of the array
+      while (j >= 0 && array[j].compareTo(temp) > 0) {
+        // if the j value is bigger than temp, move it to the right
+        array[j + 1] = array[j];
+        // Decrement j to loop through the organized part of the array
+        j--;
+      }
+      // Sets the temp value to the correct index that
+      array[j + 1] = temp;
+    }
+
    }
 
    ///////////////////////////////////////////
