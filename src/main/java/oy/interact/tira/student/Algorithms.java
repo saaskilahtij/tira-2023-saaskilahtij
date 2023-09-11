@@ -14,27 +14,23 @@ public class Algorithms {
    ///////////////////////////////////////////
 
    public static <T extends Comparable<T>> void insertionSort(T[] array) {
-    
-    // TODO: NULL CHECK!!
-
-    // Loops all elements in the array
-    for (int i = 1; i < array.length; i++) {
-      // Sets the current value to temp
-      T temp = array[i];
-      // Sets the index of the comparable value
-      int j = i - 1;
-
-      // Loops through the organized part of the array
-      while (j >= 0 && array[j].compareTo(temp) > 0) {
-        // if the j value is bigger than temp, move it to the right
-        array[j + 1] = array[j];
-        // Decrement j to loop through the organized part of the array
-        j--;
+      // Loop through the whole array
+      for (int i = 1; i < array.length; i++) {
+        // Initialize the current value
+        T current = array[i];
+        // Initialize the index of the value that gets compared
+        int j = i - 1;
+        // If the current value is less than the value on the left move
+        // the value on the left to the right until the right place has been found.
+        while (j >= 0 && current.compareTo(array[j]) < 0) {
+          array[j + 1] = array[j];
+          j--;
+        }
+        // When coming here, it means that the current value is bigger 
+        // than the value on the left.
+        // This means putting the current value to the right of the smaller compared value at j
+        array[j + 1] = current;
       }
-      // Sets the temp value to the correct index that
-      array[j + 1] = temp;
-    }
-
    }
 
    ///////////////////////////////////////////
@@ -43,6 +39,20 @@ public class Algorithms {
 
    public static <T extends Comparable<T>> void insertionSort(T[] array, int fromIndex, int toIndex) {
       // TODO: Student, implement this.
+      
+      // TEST FOR THIS???? WHERE????
+      // Loop from fromIndex to toIndex
+      for (int i = fromIndex + 1; i < toIndex; i++) {
+        T current = array[i];
+        int j = i - 1;
+
+        // Same algorithm as the loop above
+        while (j >= 0 && current.compareTo(array[j]) < 0) {
+          array[j + 1] = array[j];
+          j--;
+        }
+        array[j + 1] = current;
+      }
    }
 
    //////////////////////////////////////////////////////////
@@ -66,7 +76,16 @@ public class Algorithms {
    ///////////////////////////////////////////
 
    public static <T> void reverse(T[] array) {
-      // TODO: Student, implement this.
+    
+    // Loop to the middle of the array
+    for (int i = 0; i < (array.length / 2); i++) {
+      // Save temporary value for swapping
+      T temp = array[i];
+      // Set the first value to the last value
+      array[i] = array[array.length - i - 1];
+      // Set the temporary value to the last value
+      array[array.length - i - 1] = temp;  
+    }
    }
 
    ///////////////////////////////////////////
