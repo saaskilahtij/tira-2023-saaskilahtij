@@ -9,6 +9,15 @@ public class Algorithms {
       // nada
    }
 
+  // Function that swaps the given values in the array
+  public static <T> void swap(T[] array, int index1, int index2) {
+    T temp = array[index1];
+    array[index1] = array[index2];
+    array[index2] = temp;
+  }
+
+
+
    ///////////////////////////////////////////
    // Insertion Sort for the whole array
    ///////////////////////////////////////////
@@ -23,7 +32,8 @@ public class Algorithms {
         // If the current value is less than the value on the left move
         // the value on the left to the right until the right place has been found.
         while (j >= 0 && current.compareTo(array[j]) < 0) {
-          array[j + 1] = array[j];
+          // Swap the value if it's bigger than the current value
+          swap(array, j + 1, j);
           j--;
         }
         // When coming here, it means that the current value is bigger 
@@ -38,17 +48,15 @@ public class Algorithms {
    ///////////////////////////////////////////
 
    public static <T extends Comparable<T>> void insertionSort(T[] array, int fromIndex, int toIndex) {
-      // TODO: Student, implement this.
-      
-      // TEST FOR THIS???? WHERE????
+
       // Loop from fromIndex to toIndex
-      for (int i = fromIndex + 1; i < toIndex; i++) {
+      for (int i = (fromIndex + 1); i < toIndex; i++) {
         T current = array[i];
         int j = i - 1;
 
         // Same algorithm as the loop above
         while (j >= 0 && current.compareTo(array[j]) < 0) {
-          array[j + 1] = array[j];
+          swap(array, j + 1, j);
           j--;
         }
         array[j + 1] = current;
@@ -79,12 +87,8 @@ public class Algorithms {
     
     // Loop to the middle of the array
     for (int i = 0; i < (array.length / 2); i++) {
-      // Save temporary value for swapping
-      T temp = array[i];
-      // Set the first value to the last value
-      array[i] = array[array.length - i - 1];
-      // Set the temporary value to the last value
-      array[array.length - i - 1] = temp;  
+      // Swap the value at the index i with the corresponding from the end
+      swap(array, i, array.length - i - 1);
     }
    }
 
@@ -94,6 +98,9 @@ public class Algorithms {
 
    public static <T> void reverse(T[] array, int fromIndex, int toIndex) {
       // TODO: Student, implement this.
+      for (int i = (fromIndex + 1); i < (toIndex / 2); i++) {
+        swap(array, i, toIndex - i - 1);
+      }
    }
 
 
