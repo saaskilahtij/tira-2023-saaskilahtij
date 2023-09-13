@@ -186,14 +186,28 @@ public class Coder implements Comparable<Coder> {
 	 * the Coder full names. This is to make sure we can hold several coders 
 	 * in containers having the same name (as happens in real world), but still
 	 * can identify them as different Coders using the Coder.id.
-	 * 
-	 * TODO: Implement compareTo so that the order of coders ordered by using this methos
-	 * will be natural order. Meaning, alphabetical order A...Ö (by lastname-firstname order).
 	 */
+
+  // Function that compares this Coder to another Coder  
 	@Override
-	public int compareTo(Coder another) {
-		return 0;
-	}
+	public int compareTo(Coder another) {	
+    // If this.coder lastname is greater return 1 else if this.coder lastname is less than return -1
+    // If the lastnames are the same, compare the firstnames
+    // If this.coder firstname is greater return 1 else if this.coder firstname is less than return -1
+    // If the firstnames are the same, return 0
+    if (this.lastName.compareTo(another.lastName) > 0) {
+      return 1;
+    } else if (this.lastName.compareTo(another.lastName) < 0) {
+      return -1;
+    } else {
+      if (this.firstName.compareTo(another.firstName) > 0) {
+        return 1;
+      } else if (this.firstName.compareTo(another.firstName) < 0) {
+        return -1;
+      }
+    }
+    return 0;
+  }
 
 	/**
 	 * You need to implement this in Exercise 8 on hash tables. No need to implement this before!
