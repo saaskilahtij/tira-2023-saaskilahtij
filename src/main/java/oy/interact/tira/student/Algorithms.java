@@ -85,10 +85,24 @@ public class Algorithms {
 
    public static <T> void reverse(T[] array) {
     
-    // Loop to the middle of the array
-    for (int i = 0; i < (array.length / 2); i++) {
-      // Swap the value at the index i with the corresponding from the end
-      swap(array, i, array.length - i - 1);
+    int i = 0;
+    int k = array.length - 1;
+
+    // Loop until the variables meet
+    while (i < k) {
+      // If both != null swap them
+      if (array[i] != null && array[k] != null) {
+        swap(array, i, k);
+        i++;
+        k--;
+      } else {  // Else skip the null value
+        if (array[i] == null) {
+          i++;
+        }
+        if (array[k] == null) {
+          k--;
+        }
+      }
     }
    }
 
@@ -97,10 +111,35 @@ public class Algorithms {
    ///////////////////////////////////////////
 
    public static <T> void reverse(T[] array, int fromIndex, int toIndex) {
-      // TODO: Student, implement this.
-      for (int i = (fromIndex + 1); i < (toIndex / 2); i++) {
-        swap(array, i, toIndex - i - 1);
-      }
+
+    // Ensure that the indexes are in valid range
+    if (fromIndex < 0 || fromIndex >= toIndex || toIndex > array.length) {
+      throw new IllegalArgumentException("Invalid slicing indexes");
+    }
+    // Initialize the helper variables
+    // i loops from the beginning
+    int i = fromIndex;
+    // k loops from the end of the list
+    int k = toIndex;
+
+    // Loop until the variables meet
+    while (i < k) {
+      // If none of them are null, swap the variables
+      // and engourage them to meet
+      if(array[i] != null && array[k] != null) {
+        swap(array, i, k);
+        i++;
+        k--;
+      } else { 
+        if (array[i] == null) {
+          i++;                  // If array[i] is null skip it
+        } 
+        if (array[k] == null) {
+          k--;                  // If array[k] is null skip it
+        }
+      } 
+
+    }
    }
 
 
