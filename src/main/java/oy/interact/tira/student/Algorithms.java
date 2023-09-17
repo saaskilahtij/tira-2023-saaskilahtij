@@ -9,13 +9,13 @@ public class Algorithms {
       // nada
    }
 
+
   // Function that swaps the given values in the array
   public static <T> void swap(T[] array, int index1, int index2) {
     T temp = array[index1];
     array[index1] = array[index2];
     array[index2] = temp;
   }
-
 
 
    ///////////////////////////////////////////
@@ -49,6 +49,10 @@ public class Algorithms {
 
    public static <T extends Comparable<T>> void insertionSort(T[] array, int fromIndex, int toIndex) {
 
+    if(fromIndex < 0 || fromIndex >= toIndex || toIndex > array.length) {
+      throw new IllegalArgumentException("Invalid given indexes");
+    }
+
       // Loop from fromIndex to toIndex
       for (int outerIndex = (fromIndex + 1); outerIndex < toIndex; outerIndex++) {
         T current = array[outerIndex];
@@ -68,7 +72,18 @@ public class Algorithms {
    //////////////////////////////////////////////////////////
 
    public static <T> void insertionSort(T[] array, Comparator<T> comparator) {
-      // TODO: Student, implement this.
+
+    // Same as above but using the comparator
+    for (int outerIndex = 1; outerIndex < array.length; outerIndex++) {
+      T current = array[outerIndex];
+      int innerIndex = outerIndex - 1;
+
+      while (innerIndex >= 0 && comparator.compare(current, array[innerIndex]) < 0) {
+        swap(array, innerIndex + 1, innerIndex);
+        innerIndex--;
+      }
+      array[innerIndex + 1] = current;
+    }
    }
 
    ////////////////////////////////////////////////////////////
@@ -76,7 +91,23 @@ public class Algorithms {
    ////////////////////////////////////////////////////////////
 
    public static <T> void insertionSort(T[] array, int fromIndex, int toIndex, Comparator<T> comparator) {
-      // TODO: Student, implement this.
+    
+    // Same algorithm but with comparator    
+    if(fromIndex < 0 || fromIndex >= toIndex || toIndex > array.length) {
+      throw new IllegalArgumentException("Invalid given indexes");
+    }
+
+    for (int outerIndex = (fromIndex + 1); outerIndex < toIndex; outerIndex++) {
+      T current = array[outerIndex];
+      int innerIndex = outerIndex - 1;
+
+      while (innerIndex >= 0 && comparator.compare(current, array[innerIndex]) < 0) {
+        swap(array, innerIndex + 1, innerIndex);
+        innerIndex--;
+      }
+      
+      array[innerIndex + 1] = current;
+    }
    }
 
    ///////////////////////////////////////////
@@ -93,14 +124,14 @@ public class Algorithms {
       // If both != null swap them
       if (array[innerIndex] != null && array[outerIndex] != null) {
         swap(array, innerIndex, outerIndex);
-        innerIndex++;
-        outerIndex--;
+        ++innerIndex;
+        --outerIndex;
       } else {  // Else skip the null value
         if (array[innerIndex] == null) {
-          innerIndex++;
+          ++innerIndex;
         }
         if (array[outerIndex] == null) {
-          outerIndex--;
+          --outerIndex;
         }
       }
     }
@@ -114,7 +145,7 @@ public class Algorithms {
 
     // Ensure that the indexes are in valid range
     if (fromIndex < 0 || fromIndex >= toIndex || toIndex > array.length) {
-      throw new IllegalArgumentException("Invalid slicing indexes");
+      throw new IllegalArgumentException("Invalid given indexes");
     }
     // Initialize the helper variables
     // i loops from the beginning
@@ -124,18 +155,18 @@ public class Algorithms {
 
     // Loop until the variables meet
     while (innerIndex < outerIndex) {
-      // If none of them are null, swap the variables
-      // and engourage them to meet
+      // If none of them are null, swap the variables and move the indexes
       if(array[innerIndex] != null && array[outerIndex] != null) {
         swap(array, innerIndex, outerIndex);
-        innerIndex++;
-        outerIndex--;
+        ++innerIndex;
+        --outerIndex;
       } else { 
+        // If null, skip
         if (array[innerIndex] == null) {
-          innerIndex++;                  // If array[i] is null skip it
+          ++innerIndex;                  
         } 
         if (array[outerIndex] == null) {
-          outerIndex--;                  // If array[k] is null skip it
+          --outerIndex;                  
         }
       } 
 
