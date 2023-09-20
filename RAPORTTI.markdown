@@ -45,11 +45,11 @@ Arvioidaan nyt lisäyslajittelun aikakompleksisuutta. Parhaassa tapauksessa list
 
 Listan kääntämisessä aikakompleksisuus on vakio n suhteen. Koska ensimmäinen silmukka käy läpi arvot n/2, saadaan aikakompleksisuudeksi O(n/2) josta tippuu vielä vakio ja saadaan O(n).
 
+***Jos taulukko on jo valmiiksi järjestyksessä nousevaan järjestykseen, ja se aiotaan lajitella laskevaan järjestykseen, kannattaako taulukko lajitella vai kääntää sen järjestys? Miksi, perustele?***
 
-| n | Fill | Search | Total |
-|---|------|--------|-------|
-|                           |
-|                           |
+Kun taulukko voidaan kääntää kahdella eri algoritmilla, kannattaa sen tehdä algoritmilla joka hoitaa lajittelun nopeammin; olettaen ettei nopeamman algoritmin tilakompleksisuus ole järjetön. Kun vertaillaan algoritmien nopeutta, voidaan niitä vertailla aikakompleksisuuden avulla. Kun katsotaan lisäyslajittelua tapauksessa jossa esimerkiksi lista=[5,4,3,2,1] halutaan kääntää, voidaan aloittaa aikakompleksisuuden analysoinnilla.
+
+Ensimmäinen ```for()``` silmukka iteroi jokatapauksessa listan läpi, jolloin sen aikakompleksisuus on ***O(n)***. Sen sisäisen ```while()``` silmukan toiminta tiedetään ja se suorittaa jokaiselle ***n***:lle ```int outerIndex``` arvon verran operaatioita. Koska ```int outerIndex``` arvot ovat suorituksen aikana ***1 - n***, saadaan silmukan aikakompleksisuudeksi ***O(n)*** vakion pudottua. Kun silmukat yhdistetään saadaan aikakompleksisuudeksi ***O(n^2)***, joka häviää taulukon kääntöalgoritmin ***O(n)*** aikakompleksisuudelle jokaisessa ***n***:n tapauksessa.
 
 
 ## 02-TASK
