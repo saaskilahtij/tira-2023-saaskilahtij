@@ -25,6 +25,10 @@ public class Algorithms {
    public static <T extends Comparable<T>> void insertionSort(T[] array) {
       // Loop through the whole array
       for (int outerIndex = 1; outerIndex < array.length; outerIndex++) {
+        // Check if the value at outerIndex is null and return if it is
+        if (array[outerIndex] == null) {
+          return;
+        }
         // Initialize the current value
         T current = array[outerIndex];
         // Initialize the index of the value that gets compared
@@ -55,6 +59,9 @@ public class Algorithms {
 
       // Loop from fromIndex to toIndex
       for (int outerIndex = (fromIndex + 1); outerIndex < toIndex; outerIndex++) {
+        if (array[outerIndex] == null) {
+          return;
+        }
         T current = array[outerIndex];
         int innerIndex = outerIndex - 1;
 
@@ -75,6 +82,9 @@ public class Algorithms {
 
     // Same as above but using the comparator
     for (int outerIndex = 1; outerIndex < array.length; outerIndex++) {
+      if (array[outerIndex] == null) {
+        return;
+      }
       T current = array[outerIndex];
       int innerIndex = outerIndex - 1;
 
@@ -98,6 +108,9 @@ public class Algorithms {
     }
 
     for (int outerIndex = (fromIndex + 1); outerIndex < toIndex; outerIndex++) {
+      if (array[outerIndex] == null) {
+        return;
+      }
       T current = array[outerIndex];
       int innerIndex = outerIndex - 1;
 
