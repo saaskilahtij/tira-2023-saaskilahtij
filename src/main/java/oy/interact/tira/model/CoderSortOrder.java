@@ -57,9 +57,6 @@ public enum CoderSortOrder {
 
   public Comparator<Coder> getComparator() {
     
-    CoderFullNameComparator coderFullNameComparator = new CoderFullNameComparator();
-    CoderNameComparator coderNameComparator = new CoderNameComparator();
-
     switch (this) {
         case FULLNAME_ASCENDING:
             return new CoderFullNameComparator();
