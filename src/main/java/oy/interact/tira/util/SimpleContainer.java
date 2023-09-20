@@ -186,7 +186,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
     if (array == null || array.length == 0) {
       return;
     }
-    Algorithms.reverse(array, 0, array.length);
+    Algorithms.reverse(array, 0, (array.length - 1));
     // TODO: Student: finish this as part of task 02.
 	}
 

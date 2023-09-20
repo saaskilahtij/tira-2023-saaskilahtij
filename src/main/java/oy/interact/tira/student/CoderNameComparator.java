@@ -9,9 +9,9 @@ public class CoderNameComparator implements Comparator<Coder> {
   // If the names are the same returns 0
   @Override
   public int compare(Coder c1, Coder c2) {
-    if (c1.getCoderName().compareTo(c2.getCoderName()) < 0) {
+    if (c1.getCoderName().compareTo(c2.getCoderName()) > 0) {
       return 1;
-    } else if (c1.getCoderName().compareTo(c2.getCoderName()) > 0) {
+    } else if (c1.getCoderName().compareTo(c2.getCoderName()) < 0) {
       return -1;
     }
     return 0;

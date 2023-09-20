@@ -188,6 +188,7 @@ public class Coder implements Comparable<Coder> {
 	 * can identify them as different Coders using the Coder.id.
 	 */
 
+   
   // Function that compares this Coder to another Coder  
 	@Override
 	public int compareTo(Coder another) {	
