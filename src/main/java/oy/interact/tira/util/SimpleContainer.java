@@ -205,6 +205,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
       return;
     }
     Algorithms.insertionSort(array, 0, array.length, usingComparator);
+    sorted = true;
 	}
 
 }
