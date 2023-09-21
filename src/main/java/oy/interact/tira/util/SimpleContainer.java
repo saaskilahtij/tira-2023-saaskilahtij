@@ -2,6 +2,7 @@ package oy.interact.tira.util;
 
 import java.lang.reflect.Array;
 import java.util.Comparator;
+import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 import oy.interact.tira.NotYetImplementedException;
@@ -60,14 +61,22 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 
 	@Override
 	public E get(E element) throws IllegalArgumentException {
-		// TODO: Student: finish this as part of task 02.
-		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
+    for (int i = 0; i < (array.length - 1); i++) {
+      if (element.equals(array[i]) && array[i] != null) {
+        return array[i];
+      }
+    }
+    throw new NoSuchElementException("Given element is not found in the list");
 	}
 
 	@Override
 	public int indexOf(E element, Comparator<E> usingComparator) {
-		// TODO: Student: finish this as part of task 02.
-		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
+    for (int i = 0; i < (array.length - 1); i++) {
+      if (element.compareTo(array[i]) == 0) {
+        return i; 
+      }
+    }
+    throw new NoSuchElementException("Given element is not found in the list");
 	}
 
 	// Note: This method is NOT USED by tests and TIRA Coders GUI.
@@ -113,13 +122,17 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 
 	@Override
 	public int findIndex(Predicate<E> searcher) {
-		// TODO: Student: finish this as part of task 02.
-		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
+    for (int i = 0; i < (array.length - 1); i++) {
+      if (searcher.test(array[i])) {
+        return i;
+      }
+    }
+    throw new NoSuchElementException("Given element is not found in the list");
 	}
 
 	@Override
 	public E find(Predicate<E> searcher) {
-		// TODO: Student: finish this as part of task 02.
+    
 		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
 	}
 

@@ -56,16 +56,15 @@ public enum CoderSortOrder {
 
 
   public Comparator<Coder> getComparator() {
-    
     switch (this) {
         case FULLNAME_ASCENDING:
             return new CoderFullNameComparator();
         case FULLNAME_DESCENDING:
-            return new CoderFullNameComparator().reversed(); // Käänteinen järjestys
+            return new CoderFullNameComparator().reversed();
         case CODER_NAME_ASCENDING:
             return new CoderNameComparator();
         case CODER_NAME_DESCENDING:
-            return new CoderNameComparator().reversed(); // Käänteinen järjestys
+            return new CoderNameComparator().reversed();
         default:
             return null;
     }
