@@ -72,7 +72,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 	@Override
 	public int indexOf(E element, Comparator<E> usingComparator) {
     for (int i = 0; i < (array.length - 1); i++) {
-      if (element.compareTo(array[i]) == 0) {
+      if (element.compareTo(array[i]) == 0 && array[i] != null) {
         return i; 
       }
     }
@@ -123,17 +123,33 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 	@Override
 	public int findIndex(Predicate<E> searcher) {
     for (int i = 0; i < (array.length - 1); i++) {
-      if (searcher.test(array[i])) {
-        return i;
+      if (searcher == null) {
+        throw new IllegalArgumentException("Given predicate is null");
+      }
+      if (array[i] != null) {
+        if (searcher.test(array[i])) {
+          return i;
+        }
       }
     }
+    // What to return if not found????
     throw new NoSuchElementException("Given element is not found in the list");
 	}
 
 	@Override
 	public E find(Predicate<E> searcher) {
-    
-		throw new NotYetImplementedException("Task 02-TASK on linear search not yet implemented");
+    for (int i = 0; i < (array.length - 1); i++) {
+      if (searcher == null) {
+        throw new IllegalArgumentException("Given predicate is null");
+      }
+      if (array[i] != null) {
+        if (searcher.test(array[i])) {
+          return array[i];
+        }
+      }
+    }
+    // What to return if not found???
+    throw new NoSuchElementException("Given element is not found in the list");
 	}
 
 	@Override
