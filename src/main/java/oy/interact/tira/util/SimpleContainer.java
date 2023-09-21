@@ -132,6 +132,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
         }
       }
     }
+    // todo: solve this return thing
     // What to return if not found????
     throw new NoSuchElementException("Given element is not found in the list");
 	}
