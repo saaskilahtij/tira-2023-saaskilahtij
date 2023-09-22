@@ -54,6 +54,12 @@ Ensimmäinen ```for()``` silmukka iteroi jokatapauksessa listan läpi, jolloin s
 
 ## 02-TASK
 
+Tehtävässä opin syvemmin soveltamaan Comparator luokkaa. Opin myös lineaarisen haun algoritmin eri sovellutuksia. Tutustuin myös Javan Predicate luokkaan.
+
+
+
+
+
 ## 03-TASK
 
 ## 04-TASK
