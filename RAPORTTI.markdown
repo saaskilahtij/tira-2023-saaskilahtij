@@ -54,13 +54,54 @@ Ensimmäinen ```for()``` silmukka iteroi jokatapauksessa listan läpi, jolloin s
 
 ## 02-TASK
 
-Tehtävässä opin syvemmin soveltamaan Comparator luokkaa. Opin myös lineaarisen haun algoritmin eri sovellutuksia. Tutustuin myös Javan Predicate luokkaan.
+Tehtävässä opin syvemmin soveltamaan Comparator luokkaa. Opin myös lineaarisen haun algoritmin eri sovellutuksia. Tutustuin myös Javan Predicate luokkaan. Lineaarisen haun implementointi oli helppoa, mutta Comparatorin ja Predicaten käyttö oli haasteellisempaa.
+
+Erot suoritusajassa johtuvat listan järjestyksestä kun sitä aletaan järjestelemään. Sorttaus koodarinimillä ja kokonimillä on suunnilleen yhtä nopea. Myös listan kääntämiset ovat noin yhtä nopeita molemmille vaihtoehdoille. Kun lista sortataan sekä käännetään, voi nähdä että aika on T(insertionSort) + T(reverse), eli ohjelma järjestelee listan ensin ja vasta sitten kääntää sen.
+
+Käytetyt algoritmit ovat ```insertionSort()``` ja ```reverse()``` joiden aikakompleksisuutta analysoin jo ensimmäisen tehtävän raportissa. Insertion sortin aikakompleksisuus O(n^2) ja reversen O(n) ja jos käyttäjä valitsee toiminnan jossa lista järjestellään sekä käännetään, saadaan kahden algoritmin yhdistelmäksi O(n^2) ja O(n), jossa O(n) ei paina sen vertaa että sitä kannattaisi huomioida. Täten koko operaation aikakompleksisuudeksi saadaan O(n^2).
+ 
+Vastaus kysymykseen mitä algoritmia käyttäisin jos aineisto olisi jo lajiteltu ja se täytyisi kääntää. Vastaus tähän kysymykseen on: sitä algoritmia joka on aika- ja tilakompleksisuudeltaan optimaalisin. Jo implementoiduista algoritmeistä käyttäisin ```reverse()``` algoritmia, sillä sen aikakompleksisuudeksi saadaan tehokas O(n).
+
+Algoritmeja kutsutaan lineaarisiksi, koska niiden aikakompleksisuus on lineaarinen O(n). Sen voi huomata, kun hakee sovelluksessa ensimmäistä koodaria 
+**"Search took 0 ms"** ja viimeistä koodaria **"Search took 30 ms"** jossa aika vaihtelee aineiston suuruuden mukaan.
 
 
+![Lineaarisen haun O(n) graafi](/src/main/resources/images/linear_search_graph.png)
 
 
 
 ## 03-TASK
+
+Tehtävässä opin puolitushaun algoritmin. En kokenut vaikeuksia implementoidessani algoritmia tai integroidessani sitä sovellukseen.
+
+Kun ohjelmalla haetaan lineaarihaulla 50 000 objektin aineistosta henkilöitä *Sukunimellä*, kun aloitetaan laskevassa järjestyksessä ja testataan "Öörni" saadaan vertailuarvoksi noin ***50ms***. Vastaavasti "Aakula" etsitään ***0ms*** ja noin keskivälistä "Mellas" palauttaa noin ***30ms*** joka kertoo, että ollaan jo listan puolivälin alapuolella. Konkreettinen todiste O(n) toiminnasta, joka kalpeuttaa kivenkovimmankin empiristi-skeptikon. 
+
+Puolitushaun testit eroavat siinä, että lista täytyy järjestellä algoritmin toimintaa varten. Järjestelyyn vaadittava aika on kuitenkin suhteellisen minimaalinen. Puolitushaku on merkittävästi lineaarista hakua nopeampi suuremmilla tietomäärillä. Kuitenkin järjestely vie aikaa ja järjestelemättömille pienille tietomäärille käyttäisin lineaarista hakua. Puolitushakua kannattaa käyttää suuremmille ja järjestetyille tietomäärille.
+
+```
+Pohdi ja kokeile:
+Mikä on tässä nopeassa haussa keskimäärin suoritusaika suhteessa ensimmäiseen hakuun?
+Kokeile hakea molemmilla tavoilla koodareita myös listan alusta. Mitä huomaat?
+Kokeile ladata pieniä koodaritiedostoja ja kokeile molempia hakutapoja niillä, sekä lopusta listaa että alusta listaa.
+Kirjoita havainnoistasi ja analyysistäsi miksi näin käy, raportiisi.
+Miksi jompi kumpi haku on nopeampi, ja onko sillä väliä haetaanko aineiston alusta vai lopusta? Pohdi ja perustele.
+```
+
+# Analysoi nää!
+
+### Puolitushaun aineiston (n) suhde täyttöaikaan (ms)
+![Puolitushaun haku O(n) graafi](/src/main/resources/images/binary_search/binary_search_fill.png)
+
+### Puolitushaun aineiston (n) suhde lajitteluaikaan (ms)
+![Puolitushaun haku O(n) graafi](/src/main/resources/images/binary_search/binary_search_sort.png)
+
+### Puolitushaun aineiston (n) suhde hakuaikaan (ms)
+![Puolitushaun haku O(n) graafi](/src/main/resources/images/binary_search/binary_search_search.png)
+
+### Puolitushaun aineiston (n) suhde operaatioiden aikaan (ms)
+![Puolitushaun total O(n) graafi](/src/main/resources/images/binary_search/binary_search_graph.png)
+
+
 
 ## 04-TASK
 

@@ -103,7 +103,7 @@ public class Algorithms {
    public static <T> void insertionSort(T[] array, int fromIndex, int toIndex, Comparator<T> comparator) {
     
     // Same algorithm but with comparator    
-    if(fromIndex < 0 || fromIndex >= toIndex || toIndex > array.length) {
+    if (fromIndex < 0 || fromIndex >= toIndex || toIndex > array.length) {
       throw new IllegalArgumentException("Invalid given indexes");
     }
 
@@ -122,6 +122,7 @@ public class Algorithms {
       array[innerIndex + 1] = current;
     }
    }
+
 
    ///////////////////////////////////////////
    // Reversing an array
@@ -164,7 +165,7 @@ public class Algorithms {
     // i loops from the beginning
     int innerIndex = fromIndex;
     // k loops from the end of the list
-    int outerIndex = toIndex;
+    int outerIndex = toIndex - 1;
 
     // Loop until the variables meet
     while (innerIndex < outerIndex) {
@@ -191,16 +192,84 @@ public class Algorithms {
    ///////////////////////////////////////////
 
    public static <T extends Comparable<T>> int binarySearch(T aValue, T[] fromArray, int fromIndex, int toIndex) {
-      return -1;
+
+    if (fromIndex < 0 || fromIndex >= toIndex || toIndex > fromArray.length) {
+      throw new IllegalArgumentException("Invalid given indexes");
+    }
+
+    if (aValue == null) {
+      throw new IllegalArgumentException("Value cannot be null");
+    }
+    
+    // Take temporary variables for the indexes to mutate
+    int left = fromIndex;
+    int right = toIndex - 1;
+    
+    // Loop until the indexes meet
+    while (left <= right) {
+
+      // Calculate the middle index
+      int middle = (right + left) / 2;
+      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      // Throws index out of bounds here
+      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      if (aValue.compareTo(fromArray[middle]) < 0) {  // If value < value at middle index, move the right index
+        right = middle - 1;
+      } else if (aValue.compareTo(fromArray[middle]) > 0) { // If value > value at middle index, move the left index
+        left = middle + 1;
+      } else {
+        return middle;  // If value == value at middle index, return the index
+      }
+    }
+    return -1;   // If not found, return -1
    }
+
 
    ///////////////////////////////////////////
    // Binary search using a Comparator
    ///////////////////////////////////////////
 
    public static <T> int binarySearch(T aValue, T[] fromArray, int fromIndex, int toIndex, Comparator<T> comparator) {
-      return -1;
+
+    if (fromIndex < 0 || fromIndex >= toIndex || toIndex > fromArray.length) {
+        throw new IllegalArgumentException("Invalid given indexes");
+    }
+
+    if (comparator == null){
+      throw new IllegalArgumentException("Comparator cannot be null");
+    }
+
+    if (aValue == null) {
+      throw new IllegalArgumentException("Value cannot be null");
+    }
+
+    int left = fromIndex;
+    int right = toIndex;
+
+    while (left <= right) {
+
+      int middle = (right + left) / 2;
+
+      if (fromArray[middle] == null) {
+        return -1;
+      }
+      if (comparator.compare(aValue, fromArray[middle]) < 0) {
+        right = middle - 1;
+      } else if (comparator.compare(aValue, fromArray[middle]) > 0) {
+        left = middle + 1;
+      } else {
+        return middle;
+      }
+    }
+    
+    return -1;
    }
+
+   //TODO: Recursive binary search with Comparator
+   // Remember to mention in the report!
+
+
+
 
    public static <E extends Comparable<E>> void fastSort(E [] array) {
       // TODO: Student, implement this.

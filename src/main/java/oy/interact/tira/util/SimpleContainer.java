@@ -71,12 +71,17 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 
 	@Override
 	public int indexOf(E element, Comparator<E> usingComparator) {
+    // If sorted, use binary search
+    if (sorted == true) {
+      return Algorithms.binarySearch(element, array, 0, (array.length - 1), usingComparator);
+    }
+    // If not sorted, use linear search
     for (int i = 0; i < (array.length - 1); i++) {
-      if (element.compareTo(array[i]) == 0 && array[i] != null) {
-        return i; 
+      if (element.equals(array[i]) && array[i] != null) {
+        return i;
       }
     }
-    throw new NoSuchElementException("Given element is not found in the list");
+    return -1;
 	}
 
 	// Note: This method is NOT USED by tests and TIRA Coders GUI.
@@ -105,7 +110,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 					array[foundIndex] = null;
 					count--;
 					break;
-				}
+        }
 			}
 		}
 		// Move all the rest down one step to fill the null in array.
@@ -214,15 +219,16 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
       return;
     }
     Algorithms.reverse(array, 0, (array.length - 1));
-    // TODO: Student: finish this as part of task 02.
 	}
 
 	// TEACHERS: TODO: Remove the call to Algorithms sort method.
 	@Override
 	public void sort() {
-		
-    // TODO: Student: finish this as part of task 02.
-
+    if (array == null || array.length == 0) {
+      return;
+    }  
+    Algorithms.insertionSort(array, 0, (array.length - 1));
+    sorted = true;
 	}
 
 	// TEACHERS: TODO: Remove the call to Algorithms sort method.
@@ -231,7 +237,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
     if (array == null || array.length == 0) {
       return;
     }
-    Algorithms.insertionSort(array, 0, array.length, usingComparator);
+    Algorithms.insertionSort(array, 0, (array.length - 1), usingComparator);
     sorted = true;
 	}
 
