@@ -192,10 +192,6 @@ public class Coder implements Comparable<Coder> {
   // Function that compares this Coder to another Coder  
 	@Override
 	public int compareTo(Coder another) {	
-    // If this.coder lastname is greater return 1 else if this.coder lastname is less than return -1
-    // If the lastnames are the same, compare the firstnames
-    // If this.coder firstname is greater return 1 else if this.coder firstname is less than return -1
-    // If the firstnames are the same, return 0
     if (this.lastName.compareTo(another.lastName) > 0) {
       return 1;
     } else if (this.lastName.compareTo(another.lastName) < 0) {
