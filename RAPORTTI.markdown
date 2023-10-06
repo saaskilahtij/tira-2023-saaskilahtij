@@ -90,18 +90,20 @@ Miksi jompi kumpi haku on nopeampi, ja onko sillä väliä haetaanko aineiston a
 # Analysoi nää!
 
 ### Puolitushaun aineiston (n) suhde täyttöaikaan (ms)
-![Puolitushaun haku O(n) graafi](/src/main/resources/images/binary_search/binary_search_fill.png)
+![Puolitushaun täyttöaika O(n) graafi](/src/main/resources/images/binary_search/binary_search_fill.png)
+- Puolitushaun testiä ajettaessa täyttöaika ei ole ihmeellinen. Täyttöalgoritmin O(n) graafi alkaa näyttämään lätkämailalta, joka kertoo aikatehokkuudeksi O(n^2). 
 
 ### Puolitushaun aineiston (n) suhde lajitteluaikaan (ms)
-![Puolitushaun haku O(n) graafi](/src/main/resources/images/binary_search/binary_search_sort.png)
+![Puolitushaun lajittelu O(n) graafi](/src/main/resources/images/binary_search/binary_search_sort.png)
+- Koska lajittelualgoritmi käyttää ```InsertionSort()``` algoritmi, sen aikakompleksisuus on O(n^2); kuten myös voidaan tulkita graafista.
 
 ### Puolitushaun aineiston (n) suhde hakuaikaan (ms)
 ![Puolitushaun haku O(n) graafi](/src/main/resources/images/binary_search/binary_search_search.png)
+- Puolitushaun hakuaika on mielenkiintoisin. Siinä voi huomata alun piikin, josta voidaan päätellä, että n:n ollessa < 1000, algoritmi on todella hidas. Kuitenkin n > 1000 tapauksessa puolitushaku on todella tehokas, sillä se jakaa n:n puoliksi jokaisella askeleella ja se vähentää vertailuoperaatioita merkittävästi. Kun listassa on n alkioita, etsintäväli jaetaan puoliksi log2(n) kertaa, eli aikakompleksisuudeksi saadaan O(log2 n).
 
 ### Puolitushaun aineiston (n) suhde operaatioiden aikaan (ms)
 ![Puolitushaun total O(n) graafi](/src/main/resources/images/binary_search/binary_search_graph.png)
-
-
+- Kokonaisaika ei ole myöskään yllättävä, sillä siinä kolme ylemmäistä graafia lisätään yhdeksi graafiksi. Siinä voidaan nähdä O(n^2) aikakompleksisuus, jota kuitenkin loiventaa puolitushaun O(log2 n) aikatehokkuus. Myös puolitushaun tehottomuuden pienemmille tietomäärille voi nähdä graafista.
 
 ## 04-TASK
 

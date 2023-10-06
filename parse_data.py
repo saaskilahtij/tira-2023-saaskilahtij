@@ -22,6 +22,6 @@ def get_data_row(file_name):
 file_name = "test_data.txt"
 first_numbers, second_numbers, third_numbers, fourth_numbers, fifth_numbers = get_data_row(file_name)
 
-print(fourth_numbers)
+print(first_numbers)
 
 
