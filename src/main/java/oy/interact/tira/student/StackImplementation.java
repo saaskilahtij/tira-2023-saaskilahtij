@@ -2,8 +2,6 @@ package oy.interact.tira.student;
 
 import oy.interact.tira.util.StackInterface;;
 
-
-
 public class StackImplementation<E> implements StackInterface<E> {
 
   private static final int DEFAULT_STACK_SIZE = 20;
@@ -27,20 +25,25 @@ public class StackImplementation<E> implements StackInterface<E> {
   @Override
   public void push(E element) {
   
-    // @throws OutOfMemoryError if no additional room can be allocated for the stack
+    // Element can't be null
     if (element == null) {
       throw new NullPointerException("Can't add null element to the stack");
     }
 
-    if (lastIndex == itemArray.length) {
-      Object[] newArray = new Object[DEFAULT_STACK_SIZE];
-
-      for (int i = 0; i < itemArray.length; i++) {
-          newArray[i] = itemArray[i];
+    // Allocates more space if all of it gets used
+    // Throws OutOfMemoryError if out of memory
+    if (lastIndex == (itemArray.length - 1)) {
+      try {
+        Object[] moreSpace = new Object[itemArray.length + DEFAULT_STACK_SIZE];
+      
+        for (int i = 0; i < itemArray.length; i++) {
+          moreSpace[i] = itemArray[i];
+        }
+        itemArray = moreSpace;
+      } catch (OutOfMemoryError e) {
+        throw new OutOfMemoryError("Out of memory while trying to push an element to the stack");
       }
-      itemArray = newArray;
     }
-
     itemArray[lastIndex] = element;
     ++lastIndex;
   }
@@ -48,28 +51,42 @@ public class StackImplementation<E> implements StackInterface<E> {
   @Override
   public E pop() {
 
-    if (itemArray == null) {
-      return null;
+    E returnObj = (E) itemArray[lastIndex];
+
+    if (lastIndex == 0) {
+      throw new IllegalStateException("Stack is empty, can't pop an element");
     }
-
     itemArray[lastIndex] = null;
-    return null;
+    return returnObj;
   }
 
+  @Override
   public E peek() {
-    return null;
+    
+    if (lastIndex == 0) {
+      throw new IllegalStateException("Stack is empty, can't peek");
+    }
+    return (E) itemArray[lastIndex];
   }
 
+  @Override
   public int size() {
-    return 0;
+    return (lastIndex + 1);
   }
 
+  @Override
   public boolean isEmpty() {
-    return false;
+    if (lastIndex == 0) {
+      return false;
+    }
+    return true;
   }
 
+  @Override
   public void clear() {
-
+    for (int i = 0; i <= lastIndex; i++) {
+      itemArray[i] = null;
+    }
   }
 
   @Override 
@@ -86,5 +103,4 @@ public class StackImplementation<E> implements StackInterface<E> {
 
     return builder.toString();
   }
-
 }
