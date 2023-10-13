@@ -1,5 +1,6 @@
 package oy.interact.tira.student;
 
+
 import oy.interact.tira.util.StackInterface;
 
 public class ParenthesisChecker {
@@ -49,6 +50,60 @@ public class ParenthesisChecker {
     * @throws StackAllocationException If the stack cannot be allocated or reallocated if necessary.
     */
     public static int checkParentheses(StackInterface<Character> stack, String fromString) throws ParenthesesException {
+      
+      int columnNum = 0;
+      boolean inQuote = false;
+
+      for (int i = 0; i < fromString.length(); i++) {
+        char current = fromString.charAt(i);
+        
+        if (current == '\n') {
+          ++columnNum;
+        }
+
+        if (current == '"') {
+          inQuote =! inQuote;
+        }
+        if (!inQuote) {
+          if (current == '(' || current == '[' || current == '{' ) {
+            try {
+              stack.push(current);
+            } catch (Exception e) {
+              // Heitä oikeat errorit
+              throw e;
+            }
+          } else if (current == ')' || current == ']' || current == '}') {
+            try {
+              stack.pop();
+            } catch (Exception e) {
+              // Heitä oikeat errorit
+              throw e;
+            }
+          }
+        }
+      }
+      
+      int parentheses = 0;
+      int squareBrackets = 0;
+      int braces = 0;
+      int [][] brackets = new int[3][2];
+
+      for (int i = 0; i < stack.size(); i++) {
+        Character popped = stack.pop();
+        if(popped == '}') {
+          brackets[2][1]++;
+        } else if(popped == ']') {
+          brackets[1][1]++;
+        } else if(popped == ')') {
+          brackets[0][1]++;
+        } else if(popped == '{') {
+          brackets[2][0]++;
+        } else if(popped == '[') {
+          brackets[1][0]++;
+        } else if(popped == '(') {
+          brackets[0][0]++;
+        }
+      }
       // TODO:
       // for each character in the input string
       //   if in between of quotes
@@ -65,5 +120,11 @@ public class ParenthesisChecker {
       // if the stack is not empty after all the characters have been handled
       //   throw an exception since the string has more opening than closing parentheses.
       return 0;
-   }
-}
+    }
+    
+    
+    private boolean isMatching(char open, char close) {
+      return (open == '(' && close == ')') || (open == '{' && close == '}') || (open == '[' && close == ']');
+    } 
+
+  }

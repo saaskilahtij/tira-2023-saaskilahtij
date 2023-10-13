@@ -4,10 +4,10 @@ import oy.interact.tira.util.StackInterface;;
 
 public class StackImplementation<E> implements StackInterface<E> {
 
-  private static final int DEFAULT_STACK_SIZE = 20;
+  private static final int DEFAULT_STACK_SIZE = 10;
   
   private Object [] itemArray;
-  int lastIndex;
+  int top = -1;
   
   public StackImplementation() {
     itemArray = new Object[DEFAULT_STACK_SIZE];
@@ -15,6 +15,16 @@ public class StackImplementation<E> implements StackInterface<E> {
 
   public StackImplementation(int size) {
     itemArray = new Object[size];
+  }
+
+  private void allocateSpace() {
+  
+    Object[] moreSpace = new Object[itemArray.length * 2];
+
+    for (int i = 0; i < itemArray.length; i++) {
+      moreSpace[i] = itemArray[i];
+    }
+    itemArray = moreSpace;
   }
 
   @Override
@@ -32,75 +42,77 @@ public class StackImplementation<E> implements StackInterface<E> {
 
     // Allocates more space if all of it gets used
     // Throws OutOfMemoryError if out of memory
-    if (lastIndex == (itemArray.length - 1)) {
+    if (top == (itemArray.length - 1)) {
       try {
-        Object[] moreSpace = new Object[itemArray.length + DEFAULT_STACK_SIZE];
-      
-        for (int i = 0; i < itemArray.length; i++) {
-          moreSpace[i] = itemArray[i];
-        }
-        itemArray = moreSpace;
+        allocateSpace();
       } catch (OutOfMemoryError e) {
         throw new OutOfMemoryError("Out of memory while trying to push an element to the stack");
       }
     }
-    itemArray[lastIndex] = element;
-    ++lastIndex;
+    ++top;
+    itemArray[top] = element;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public E pop() {
-
-    E returnObj = (E) itemArray[lastIndex];
-
-    if (lastIndex == 0) {
+    
+    if (top < 0) {
       throw new IllegalStateException("Stack is empty, can't pop an element");
     }
-    itemArray[lastIndex] = null;
-    return returnObj;
+
+    E returnObj = (E) itemArray[top];
+
+    itemArray[top] = null;
+    --top;
+    return  returnObj;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public E peek() {
     
-    if (lastIndex == 0) {
+    if (isEmpty()) {
       throw new IllegalStateException("Stack is empty, can't peek");
     }
-    return (E) itemArray[lastIndex];
+    return (E) itemArray[top];
   }
 
   @Override
   public int size() {
-    return (lastIndex + 1);
+    return (top + 1);
   }
 
   @Override
   public boolean isEmpty() {
-    if (lastIndex == 0) {
-      return false;
+    if (top < 0) {
+      return true;
     }
-    return true;
+    return false;
   }
 
   @Override
   public void clear() {
-    for (int i = 0; i <= lastIndex; i++) {
-      itemArray[i] = null;
-    }
+    Object [] temp = new Object[DEFAULT_STACK_SIZE];
+    top = -1;
+    itemArray = temp;
   }
 
   @Override 
   public String toString() {
     StringBuilder builder = new StringBuilder();
 
-    if (itemArray == null) {
-      return "[]";
+    builder.append("[");
+    if (!isEmpty()) {
+      builder.append(itemArray[0]);
+    } 
+    for (int i = 1; i < itemArray.length; i++) {
+      if (itemArray[i] != null) {
+        builder.append(", ");
+        builder.append(itemArray[i]);
+      } 
     }
-
-    for (int i = 0; i < itemArray.length; i++) {
-      builder.append(itemArray[i].toString());
-    }
-
+    builder.append("]");
     return builder.toString();
   }
 }
