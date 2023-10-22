@@ -53,6 +53,7 @@ public class StackImplementation<E> implements StackInterface<E> {
     itemArray[top] = element;
   }
 
+  
   @SuppressWarnings("unchecked")
   @Override
   public E pop() {
@@ -67,6 +68,7 @@ public class StackImplementation<E> implements StackInterface<E> {
     --top;
     return  returnObj;
   }
+
 
   @SuppressWarnings("unchecked")
   @Override

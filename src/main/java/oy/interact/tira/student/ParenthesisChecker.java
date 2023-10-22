@@ -51,79 +51,85 @@ public class ParenthesisChecker {
     */
     public static int checkParentheses(StackInterface<Character> stack, String fromString) throws ParenthesesException {
       
+      int rowNum = 1;
       int columnNum = 0;
+      int parentheses = 0;
       boolean inQuote = false;
 
-      for (int i = 0; i < fromString.length(); i++) {
-        char current = fromString.charAt(i);
-        
+      for (int letter = 0; letter < fromString.length(); letter++) {
+        columnNum++;
+        char current = fromString.charAt(letter);
+
         if (current == '\n') {
-          ++columnNum;
+          ++rowNum;
+          columnNum = 0;
+          continue;
         }
 
         if (current == '"') {
           inQuote =! inQuote;
+          continue;
         }
+
         if (!inQuote) {
           if (current == '(' || current == '[' || current == '{' ) {
             try {
               stack.push(current);
+              parentheses += 2;
             } catch (Exception e) {
-              // Heitä oikeat errorit
-              throw e;
+              throw new ParenthesesException("Failed pushing parenthesis to the stack", 
+                rowNum, columnNum, 
+                ParenthesesException.STACK_FAILURE);
             }
           } else if (current == ')' || current == ']' || current == '}') {
             try {
-              stack.pop();
+              char openingParentheses = stack.pop();
+              if (!isMatching(openingParentheses, current)) {
+                throw new ParenthesesException("Parenthesis didn't match", 
+                  rowNum, columnNum, 
+                  ParenthesesException.PARENTHESES_IN_WRONG_ORDER);
+              }
             } catch (Exception e) {
-              // Heitä oikeat errorit
-              throw e;
+              // TODO: handle null
             }
           }
         }
       }
       
-      int parentheses = 0;
-      int squareBrackets = 0;
-      int braces = 0;
-      int [][] brackets = new int[3][2];
-
-      for (int i = 0; i < stack.size(); i++) {
-        Character popped = stack.pop();
-        if(popped == '}') {
-          brackets[2][1]++;
-        } else if(popped == ']') {
-          brackets[1][1]++;
-        } else if(popped == ')') {
-          brackets[0][1]++;
-        } else if(popped == '{') {
-          brackets[2][0]++;
-        } else if(popped == '[') {
-          brackets[1][0]++;
-        } else if(popped == '(') {
-          brackets[0][0]++;
-        }
+      if (!stack.isEmpty()) {
+        throw new ParenthesesException("Too many opening parentheses", 
+          rowNum, columnNum, 
+          ParenthesesException.TOO_MANY_OPENING_PARENTHESES);
+        // Throw error of more opening parentheses than closing ones
       }
+
+      return parentheses;
+      // check the popped opening parenthesis against the closing parenthesis read from the string
+      // if they do not match -- opening was { but closing was ], for example.
+      // throw an exception, wrong kind of parenthesis were in the text (e.g. "asfa ( asdf } sadf")
+
+      
       // TODO:
       // for each character in the input string
       //   if in between of quotes
       //      ignore this character (but count column numbers)
       //   if character is an opening parenthesis -- one of "([{"
       //      push it into the stack (check for failure and throw an exception if so)
+
       //   else if character is a closing parenthesis -- one of ")]}"
       //      pop the latest opening parenthesis from the stack
       //      if the popped item is null
       //         throw an exception, there are too many closing parentheses 
+
       //      check the popped opening parenthesis against the closing parenthesis read from the string
       //      if they do not match -- opening was { but closing was ], for example.
       //         throw an exception, wrong kind of parenthesis were in the text (e.g. "asfa ( asdf } sadf")
+      
       // if the stack is not empty after all the characters have been handled
       //   throw an exception since the string has more opening than closing parentheses.
-      return 0;
     }
     
-    
-    private boolean isMatching(char open, char close) {
+    private static boolean isMatching(char open, char close) {
       return (open == '(' && close == ')') || (open == '{' && close == '}') || (open == '[' && close == ']');
     } 
 
