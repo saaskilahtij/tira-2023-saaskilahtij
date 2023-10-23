@@ -17,16 +17,6 @@ public class StackImplementation<E> implements StackInterface<E> {
     itemArray = new Object[size];
   }
 
-  private void allocateSpace() {
-  
-    Object[] moreSpace = new Object[itemArray.length * 2];
-
-    for (int i = 0; i < itemArray.length; i++) {
-      moreSpace[i] = itemArray[i];
-    }
-    itemArray = moreSpace;
-  }
-
   @Override
   public int capacity() {
     return itemArray.length;
@@ -44,7 +34,12 @@ public class StackImplementation<E> implements StackInterface<E> {
     // Throws OutOfMemoryError if out of memory
     if (top == (itemArray.length - 1)) {
       try {
-        allocateSpace();
+        Object[] moreSpace = new Object[itemArray.length * 2];
+
+        for (int i = 0; i < itemArray.length; i++) {
+          moreSpace[i] = itemArray[i];
+        }
+        itemArray = moreSpace;
       } catch (OutOfMemoryError e) {
         throw new OutOfMemoryError("Out of memory while trying to push an element to the stack");
       }

@@ -107,6 +107,31 @@ Miksi jompi kumpi haku on nopeampi, ja onko sillä väliä haetaanko aineiston a
 
 ## 04-TASK
 
+Opin tehtävän tekemisessä pinotietorakenteen ja mihin sitä voidaan soveltaa. Pinotietorakenne ei ollut turhan vaikea, mutta ParenthesisChecker vaatii ponnisteluja.
+
+## Tarkastellaan pinotietorakenteen aikakompleksisuusluokkia:
+
+```capacity()``` metodi palauttaa jokaisessa tapauksessa pinon kapasiteetin ja suorittaa ainoastaan yhden operaation. Tästä aikakompleksisuusluokaksi saadaan **O(1)**.
+
+```push()``` on taas monimutkaisempi. Sen aikakompleksisuusluokka ilman lisäallokointia on **O(1)**, sillä se ainoastaan lisää elementin pinon päälle. Lisäallokoinnin tapauksessa metodi luo uuden suuremman listan ja sen jälkeen lisää vanhan listan muuttujat siihen, josta saadaan aikakompleksisuus **O(n)**. Koska algoritmin aikakompleksisuus on aina huonoin tapaus, saadaan sen luokaksi **O(n)**. 
+
+```pop()``` poistaa ainoastaan pinon ylimmän elementin, jolloin sen aikakompleksisuus on **O(1)**.
+
+```peek()``` palauttaa ainoastaan pinon ylimmän objektin ja sen aikakompleksisuus on **O(1)**.
+
+```size()``` palauttaa ainoastaan pinon koon ja sen aikakompleksisuus on O(1).
+
+```ìsEmpty()``` testaa onko pino tyhjä ja palauttaa totuusarvon - sen aikakompleksisuus on **O(1)**.
+
+```clear()``` nollaa pinon luomalla uuden tyhjän pinon ja vaihtamalla sen alkuperäisen pinon päälle - sen aikakompleksisuus on **O(1)**'.
+
+```toString()``` muodostaa merkkijonon pinosta. Metodissa hyödynnetään stringBuilderia ja se iteroi pinon läpi lisäämällä ne palautettavaan merkkijonoon. Koska jokainen pinon arvo iteroidaan, saadaan aikakompleksisuudeksi **O(n)**.
+
+## ParenthesisChecker algoritmin analyysi:
+Algoritmin logiikka perustuu pinotietorakenteen hyödyntämiseen. Algoritmi alkaa käymään läpi tuotua tiedostoa merkkijonona. Algoritmi testaa ensiksi onko kyseessä '\n' ja jos on, se tarkoittaa rivin loppumista. Tämän jälkeen algoritmi testaa onko kyseessä heittomerkki ja jos on, se asettaa inQuote totuusarvon todeksi. Päälogiikka tapahtuu ehtohaarassa jos ei olla heittomerkkien sisällä. Siinä algoritmi ensin testaa onko kyseessä avaava sulku ja jos on, se lisää sen pinoon. Jos lisäyksessä tapahtuu virhe, ohjelma heittää ```Stack_Failure``` errorin. Kun silmukka iteroi sulkevan sulkumerkin se poistaa avaavan sulkumerkin pinosta. Jos tämä operaatio epäonnistuu, toisin sanoen pino on tyhjä, ohjelma heittää ```TOO_MANY_CLOSING_PARENTHESES``` errorin. Se tarkoittaa, että vastaavaa aukaisevaa sulkua ei ole merkkijonossa ollut ja että pino on tyhjä. Jos poistaminen onnistuu, ohjelma testaa ovatko sulut toisiaan vastaavia kutsumalla ```isMatcing()``` funktiota. Jos sulut vastaavat toisiaan, ohjelma jatkaa suoritusta. Jos sulut eivät vastaa toisia, tiedetään että aloittavan sulkeen sulkeva sulku on väärä ja tässä tapauksessa ohjelma heittää ```PARENTHESES_IN_WRONG_ORDER``` errorin. Silmukan jälkeen algoritmi testaa onko pino tyhjä. Jos pino ei ole tyhjä, se tarkoittaa ettei avattua sulkua ole poistettu listasta, toisin sanoen vastaavaa sulkevaa sulkua ei ole löydetty merkkijonosta. Algoritmin aikakompleksisuusluokka on **O(n)**, sillä se iteroi tasan kerran jokaisen merkkijonon merkin *n*.
+
+
+
 ## 05-TASK
 
 ## 06-TASK

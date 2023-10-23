@@ -1,6 +1,8 @@
 package oy.interact.tira.student;
 
 
+import java.util.EmptyStackException;
+
 import oy.interact.tira.util.StackInterface;
 
 public class ParenthesisChecker {
@@ -9,7 +11,7 @@ public class ParenthesisChecker {
    }
 
    /**
-    * TODO: Student: Implement this method which checks if the given string has matching opening and closing
+    * Student: Implement this method which checks if the given string has matching opening and closing
     * parentheses. It should check for matching parentheses:
 
     *   Lorem ipsum ( dolor sit {  amet, [ consectetur adipiscing ] elit, sed } do eiusmod tempor ) incididunt ut...,
@@ -89,8 +91,10 @@ public class ParenthesisChecker {
                   rowNum, columnNum, 
                   ParenthesesException.PARENTHESES_IN_WRONG_ORDER);
               }
-            } catch (Exception e) {
-              // TODO: handle null
+            } catch (IllegalStateException e) {
+              throw new ParenthesesException("Too many closing parentheses", 
+                rowNum, columnNum, 
+                ParenthesesException.TOO_MANY_CLOSING_PARENTHESES);
             }
           }
         }
@@ -100,33 +104,9 @@ public class ParenthesisChecker {
         throw new ParenthesesException("Too many opening parentheses", 
           rowNum, columnNum, 
           ParenthesesException.TOO_MANY_OPENING_PARENTHESES);
-        // Throw error of more opening parentheses than closing ones
       }
 
       return parentheses;
-      // check the popped opening parenthesis against the closing parenthesis read from the string
-      // if they do not match -- opening was { but closing was ], for example.
-      // throw an exception, wrong kind of parenthesis were in the text (e.g. "asfa ( asdf } sadf")
-
-      
-      // TODO:
-      // for each character in the input string
-      //   if in between of quotes
-      //      ignore this character (but count column numbers)
-      //   if character is an opening parenthesis -- one of "([{"
-      //      push it into the stack (check for failure and throw an exception if so)
-
-      //   else if character is a closing parenthesis -- one of ")]}"
-      //      pop the latest opening parenthesis from the stack
-      //      if the popped item is null
-      //         throw an exception, there are too many closing parentheses 
-
-      //      check the popped opening parenthesis against the closing parenthesis read from the string
-      //      if they do not match -- opening was { but closing was ], for example.
-      //         throw an exception, wrong kind of parenthesis were in the text (e.g. "asfa ( asdf } sadf")
-      
-      // if the stack is not empty after all the characters have been handled
-      //   throw an exception since the string has more opening than closing parentheses.
     }
     
     private static boolean isMatching(char open, char close) {
