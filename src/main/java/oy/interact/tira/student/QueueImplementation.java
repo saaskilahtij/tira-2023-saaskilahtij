@@ -1,87 +1,100 @@
 package oy.interact.tira.student;
 
+import oy.interact.tira.NotYetImplementedException;
 import oy.interact.tira.util.QueueInterface;
 
 public class QueueImplementation<E> implements QueueInterface<E> {
 
-  private class Node<T> {
-    T data;
-    Node<T> nextNode;
-    Node<T> previousNode;
+  private static final int DEFAULT_CAPACITY = 10;
+  
 
-    public Node(T data) {
-      this.data = data;
-    }
+
+  private Object [] queue;
+  private int headNode;
+  private int tailNode;
+  private int count;
+
+  public QueueImplementation(){
+    queue = new Object[DEFAULT_CAPACITY];
   }
 
-  private Node<E> headNode;
-  private Node<E> tailNode;
-  private int size;
-  private int capacity;
-
-  public QueueImplementation(){}
-
   public QueueImplementation(int capacity) {
-    this.capacity = capacity;
+    queue = new Object[capacity];
   }
 
   @Override
   public int capacity() {
-    return capacity;
+    return queue.length;
   }
+
 
   @SuppressWarnings("unchecked")
   @Override
-  public void enqueue(Object element) throws OutOfMemoryError, NullPointerException {
+  public void enqueue(E element) throws OutOfMemoryError, NullPointerException {
+
     if (element == null) {
-      throw new NullPointerException("Added element can't be null");
+      throw new NullPointerException("Can't add null element to the queue");
     }
-    Node newNode = new Node<>(element);
-    
-    if (size() == 0) {
-      headNode = newNode;
-      tailNode =  newNode;
-    } else {
-      tailNode.nextNode = newNode;
-      newNode.previousNode = tailNode;
-      tailNode = newNode;
+
+    if (count >= capacity()) {
+      Object [] moreSpace = new Object[capacity() * 2];
+
+      for (int i = headNode, j = 0; j < count; i++, j++) {
+        if (i == queue.length) {
+          i = 0;
+        }
+        moreSpace[j] = queue[i];
+      }
+      queue = moreSpace; 
+      headNode = 0;
+      tailNode = count;
     }
-    ++size;
+
+    if (tailNode >= capacity() && headNode > 0) {
+      tailNode = 0;
+    }
+    queue[tailNode++] = element;
+    count++;
   }
+
 
   @SuppressWarnings("unchecked")
   @Override
   public E dequeue() throws IllegalStateException {
     
-    if (size() == 0) {
-      throw new IllegalStateException("Can't dequeue, the queue is empty");
+    if (count == 0) {
+      throw new IllegalStateException("Can't dequeue empty queue");
     }
     
-    Node tempNode = new Node<>(headNode);
-    
-    headNode = tempNode.nextNode;
-    tempNode.nextNode = null; 
-    headNode = null;
-    --size;
-    return (E)tempNode.data;
+    E tempNode = (E)queue[headNode];
+    queue[headNode] = null;
+    headNode++;
+    count--;
+
+    if (headNode >= capacity()) {
+      headNode = 0;
+    }
+
+    return tempNode;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public E element() throws IllegalStateException {
-    if (size == 0) {
-      throw new IllegalStateException("Can't dequeue, the queue is empty");
+    if (isEmpty()) {
+      throw new IllegalStateException("Can't access the element the queue is empty");
     }
-    return headNode.data;
+    return (E)queue[headNode];
   }
 
   @Override
   public int size() {
-    return size;
+    return count;
   }
 
   @Override
   public boolean isEmpty() {
-    if (headNode == null) {
+    if (size() == 0) {
       return true;
     }
     return false;
@@ -89,29 +102,32 @@ public class QueueImplementation<E> implements QueueInterface<E> {
 
   @Override
   public void clear() {
-    headNode = null;
-    tailNode = null;
-    size = 0;
+    Object [] emptyQueue = new Object[DEFAULT_CAPACITY];
+    queue = emptyQueue;
+    count = 0;
+    headNode = 0;
+    tailNode = 0;
   }
 
   public String toString() {
     StringBuilder builder = new StringBuilder();
-
     builder.append("[");
 
-    if (!isEmpty()) {
-      builder.append(headNode.data);
-    }
-
-    for (int i = 1; i < size; i++) {
-      if (headNode.nextNode != null) {
+    int i = headNode;
+    int counter = count;
+    while(counter > 0) {
+      builder.append(queue[i]);
+      if (counter > 1) {
         builder.append(", ");
-        builder.append(headNode.nextNode.data);
-        headNode = headNode.nextNode;
+      }
+      ++i;
+      --counter;
+      if (i >= capacity()) {
+        i = 0;
       }
     }
+
     builder.append("]");
     return builder.toString();
   }
-
 }

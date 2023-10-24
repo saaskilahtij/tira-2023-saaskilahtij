@@ -130,9 +130,21 @@ Opin tehtävän tekemisessä pinotietorakenteen ja mihin sitä voidaan soveltaa.
 ## ParenthesisChecker algoritmin analyysi:
 Algoritmin logiikka perustuu pinotietorakenteen hyödyntämiseen. Algoritmi alkaa käymään läpi tuotua tiedostoa merkkijonona. Algoritmi testaa ensiksi onko kyseessä '\n' ja jos on, se tarkoittaa rivin loppumista. Tämän jälkeen algoritmi testaa onko kyseessä heittomerkki ja jos on, se asettaa inQuote totuusarvon todeksi. Päälogiikka tapahtuu ehtohaarassa jos ei olla heittomerkkien sisällä. Siinä algoritmi ensin testaa onko kyseessä avaava sulku ja jos on, se lisää sen pinoon. Jos lisäyksessä tapahtuu virhe, ohjelma heittää ```Stack_Failure``` errorin. Kun silmukka iteroi sulkevan sulkumerkin se poistaa avaavan sulkumerkin pinosta. Jos tämä operaatio epäonnistuu, toisin sanoen pino on tyhjä, ohjelma heittää ```TOO_MANY_CLOSING_PARENTHESES``` errorin. Se tarkoittaa, että vastaavaa aukaisevaa sulkua ei ole merkkijonossa ollut ja että pino on tyhjä. Jos poistaminen onnistuu, ohjelma testaa ovatko sulut toisiaan vastaavia kutsumalla ```isMatcing()``` funktiota. Jos sulut vastaavat toisiaan, ohjelma jatkaa suoritusta. Jos sulut eivät vastaa toisia, tiedetään että aloittavan sulkeen sulkeva sulku on väärä ja tässä tapauksessa ohjelma heittää ```PARENTHESES_IN_WRONG_ORDER``` errorin. Silmukan jälkeen algoritmi testaa onko pino tyhjä. Jos pino ei ole tyhjä, se tarkoittaa ettei avattua sulkua ole poistettu listasta, toisin sanoen vastaavaa sulkevaa sulkua ei ole löydetty merkkijonosta. Algoritmin aikakompleksisuusluokka on **O(n)**, sillä se iteroi tasan kerran jokaisen merkkijonon merkin *n*.
 
-
-
 ## 05-TASK
+
+**Kirjaa** raporttiisi `RAPORTTI.markdown` mitä opit tehtävän tekemisestä, mikä oli vaikeaa, mikä helppoa, jne.
+
+Jos toteutit tässä molemmat tietorakenteet, mainitse siitä raportissasi, jotta opettajat huomaavat testata ne ja antaa tehtävästä lisäpisteet!
+
+Vaikket olisi toteuttanutkaan molempia vaihtoehtoisia toteutuksia jonosta (taulukko ja linkitetty lista), pohdi miten ne eroavat toisistaan:
+
+* Missä asioissa linkitetty lista on parempi kuin taulukkopohjainen toteutus, muistin käytön (muistikompleksisuus) ja aikatehokkuuden (aikakompleksisuus) suhteen?
+* Missä asioissa taulukkopohjainen toteutus päihittää linkitetyn listan, muistin käytön ja aikatehokkuuden suhteen?
+
+Analysoi erityisesti sitä, onko toteutuksesi oikeasti sellainen että se vastaa tehtävän alussa esiteltyjä aikakompleksisuusvaatimuksia. 
+
+> Mikä tahansa metodi jossa on *silmukka*, ei *voi* olla O(1) -- onko sinulla silmukoita metodeissa joissa vaatimus oli O(1)? Tai kutsutko tällaisesta metodista jotain *toista* metodia jonka O on muuta kuin O(1)? Jos näin on, aikakompleksisuusvaatimus ei täyty.
+
 
 ## 06-TASK
 
