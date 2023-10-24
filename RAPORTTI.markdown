@@ -132,18 +132,12 @@ Algoritmin logiikka perustuu pinotietorakenteen hyödyntämiseen. Algoritmi alka
 
 ## 05-TASK
 
-**Kirjaa** raporttiisi `RAPORTTI.markdown` mitä opit tehtävän tekemisestä, mikä oli vaikeaa, mikä helppoa, jne.
 
-Jos toteutit tässä molemmat tietorakenteet, mainitse siitä raportissasi, jotta opettajat huomaavat testata ne ja antaa tehtävästä lisäpisteet!
+Tehtävässä opin taulukkopohjaisen jonotietorakenteen toteutuksen. Opiskelin myös linkitetyn listan idean. Taulukkopohjaisessa tietorakenteessa ```toString()``` oli helposti mutkikkain metodi. Myös ```enqueue()``` sekä ```dequeue()``` tuottivat haastetta. Viimeisiä ```toString()``` testejä debuggasin hiki otsalla ja ongelman juurisyy löytyikin salapoliisityöllä ```enqueue()``` metodista. 
 
-Vaikket olisi toteuttanutkaan molempia vaihtoehtoisia toteutuksia jonosta (taulukko ja linkitetty lista), pohdi miten ne eroavat toisistaan:
+Kun linkitettyä listaa ja taulukkopohjaista jonoa vertailee, niitä kannattaa vertailla käyttötarkoitusten mukaan. Jos tietorakennetta pidetään enimmäkseen staattisena, ei paljon lisäilyjä ja poistoja, kannattaa tässä tapauksessa suosia taulukkopohjaista jonoa - koska linkitetty lista kirjoittaa pitkin muistia ja jos muistipaikat ovat kaukana toisistaan voi se aiheuttaa hitautta. Taulukkopohjaisen tietorakenteen muistinvarauksessa se varaa perättäisiä, lähekkäisiä muistipaikkoja. Missä linkitetty lista sitten loistaa, on sen vahvuus lisätä tietoja nopeasti kunhan tietomäärät pysyvät suhteellisen pieninä, sen aikakompleksisuuden pysyven vakiona **O(1)**. Taulukkopohjaisen jonon reallokoinnin tapauksessa **O(n)** häviää aina linkitetyn listan aikakompleksisuudelle **O(1)**.
 
-* Missä asioissa linkitetty lista on parempi kuin taulukkopohjainen toteutus, muistin käytön (muistikompleksisuus) ja aikatehokkuuden (aikakompleksisuus) suhteen?
-* Missä asioissa taulukkopohjainen toteutus päihittää linkitetyn listan, muistin käytön ja aikatehokkuuden suhteen?
-
-Analysoi erityisesti sitä, onko toteutuksesi oikeasti sellainen että se vastaa tehtävän alussa esiteltyjä aikakompleksisuusvaatimuksia. 
-
-> Mikä tahansa metodi jossa on *silmukka*, ei *voi* olla O(1) -- onko sinulla silmukoita metodeissa joissa vaatimus oli O(1)? Tai kutsutko tällaisesta metodista jotain *toista* metodia jonka O on muuta kuin O(1)? Jos näin on, aikakompleksisuusvaatimus ei täyty.
+Kaikki jonon metodit täyttävät tehtävän aikavaatimukset. Hitaimmat aikakompleksisuudet löytyvät metodeista ```toString()``` joka iteroi listan jokaisen jäsenen O(n), sekä ```enqueue()``` jonka aikakompleksisuus on reallokoinnin tapauksessa **O(n)** - muuten sen ollessa **O(1)**.
 
 
 ## 06-TASK

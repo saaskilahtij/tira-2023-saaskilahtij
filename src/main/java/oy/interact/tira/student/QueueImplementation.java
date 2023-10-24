@@ -28,7 +28,6 @@ public class QueueImplementation<E> implements QueueInterface<E> {
   }
 
 
-  @SuppressWarnings("unchecked")
   @Override
   public void enqueue(E element) throws OutOfMemoryError, NullPointerException {
 
