@@ -210,9 +210,7 @@ public class Algorithms {
 
       // Calculate the middle index
       int middle = (right + left) / 2;
-      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // Throws index out of bounds here
-      // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
       if (aValue.compareTo(fromArray[middle]) < 0) {  // If value < value at middle index, move the right index
         right = middle - 1;
       } else if (aValue.compareTo(fromArray[middle]) > 0) { // If value > value at middle index, move the left index
@@ -228,6 +226,7 @@ public class Algorithms {
    ///////////////////////////////////////////
    // Binary search using a Comparator
    ///////////////////////////////////////////
+
 
    public static <T> int binarySearch(T aValue, T[] fromArray, int fromIndex, int toIndex, Comparator<T> comparator) {
 
@@ -265,22 +264,77 @@ public class Algorithms {
     return -1;
    }
 
-   //TODO: Recursive binary search with Comparator
-   // Remember to mention in the report!
+  //TODO: Recursive binary search with Comparator
+  // Remember to mention in the report!
+
+  @SuppressWarnings("unchecked")
+  public static <E extends Comparable<E>> void fastSort(E [] array) {
+
+    if (array == null) {
+      return;
+    }
+
+    int length = array.length;
+    if (length < 2) {
+      return;
+    }
+
+    int middle =  length / 2;
+    Object [] firstHalf = new Object[middle];
+    Object [] secondHalf = new Object[length - middle];
+
+    for (int i = 0; i < middle; i++) {
+      firstHalf[i] = array[i];
+    }
+
+    for (int i = middle; i < length; i++) {
+      secondHalf[i - middle] = array[i];
+    }
+
+    fastSort((E[])firstHalf);
+    fastSort((E[])secondHalf);
+    merge(array, (E[])firstHalf, (E[])secondHalf);
+  }
+
+  public static <E> void fastSort(E [] array, Comparator<E> comparator) {
+    // TODO: Student, implement this.
+  }
+
+  public static <E> void fastSort(E [] array, int fromIndex, int toIndex, Comparator<E> comparator) {
+    // TODO: Student, implement this.
+  }
 
 
+  private static <E extends Comparable<E>> void merge(E[] initialArray, E[] firstHalf, E[] secondHalf) {
+    int sizeFirst = firstHalf.length;
+    int sizeSecond = secondHalf.length;
 
+    int indexFirst = 0;
+    int indexSecond = 0;
+    int indexInitial = 0;
 
-   public static <E extends Comparable<E>> void fastSort(E [] array) {
-      // TODO: Student, implement this.
-   }
+    while(indexFirst < sizeFirst && indexSecond < sizeSecond) {
+      // if firsthalf is less than equal to 
+      if(firstHalf[indexFirst].compareTo(secondHalf[indexSecond]) <= 0) {
+        initialArray[indexInitial] = firstHalf[indexFirst];
+        ++indexFirst;
+      } else {
+        initialArray[indexInitial] = secondHalf[indexSecond];
+        ++indexSecond;
+      }
+      ++indexInitial;
+    } 
+    while(indexFirst < sizeFirst) {
+      initialArray[indexInitial] = firstHalf[indexFirst];
+      ++indexFirst;
+      ++indexInitial;
+    }
+    while(indexSecond < sizeSecond) {
+      initialArray[indexInitial] = secondHalf[indexSecond];
+      ++indexSecond;
+      ++indexInitial;
+    }
+  }
 
-   public static <E> void fastSort(E [] array, Comparator<E> comparator) {
-      // TODO: Student, implement this.
-   }
-
-   public static <E> void fastSort(E [] array, int fromIndex, int toIndex, Comparator<E> comparator) {
-      // TODO: Student, implement this.
-   }
 
 }
