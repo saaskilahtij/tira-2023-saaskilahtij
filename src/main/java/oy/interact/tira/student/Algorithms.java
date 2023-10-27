@@ -2,6 +2,7 @@ package oy.interact.tira.student;
 
 import java.io.Console;
 import java.util.Comparator;
+import java.util.Random;
 
 public class Algorithms {
 
@@ -9,14 +10,12 @@ public class Algorithms {
       // nada
    }
 
-
   // Function that swaps the given values in the array
   public static <T> void swap(T[] array, int index1, int index2) {
     T temp = array[index1];
     array[index1] = array[index2];
     array[index2] = temp;
   }
-
 
    ///////////////////////////////////////////
    // Insertion Sort for the whole array
@@ -267,6 +266,8 @@ public class Algorithms {
   //TODO: Recursive binary search with Comparator
   // Remember to mention in the report!
 
+   // Fix stack overflow!
+   // Fix heap overflow!
   @SuppressWarnings("unchecked")
   public static <E extends Comparable<E>> void fastSort(E [] array) {
 
@@ -280,8 +281,9 @@ public class Algorithms {
     }
 
     int middle =  length / 2;
-    Object [] firstHalf = new Object[middle];
-    Object [] secondHalf = new Object[length - middle];
+    E[] firstHalf = (E[]) new Comparable[middle];
+    E[] secondHalf = (E[]) new Comparable[length - middle];
+
 
     for (int i = 0; i < middle; i++) {
       firstHalf[i] = array[i];
@@ -291,17 +293,73 @@ public class Algorithms {
       secondHalf[i - middle] = array[i];
     }
 
-    fastSort((E[])firstHalf);
-    fastSort((E[])secondHalf);
-    merge(array, (E[])firstHalf, (E[])secondHalf);
+    fastSort(firstHalf);
+    fastSort(secondHalf);
+    merge(array, firstHalf, secondHalf);
   }
 
+  @SuppressWarnings("unchecked")
   public static <E> void fastSort(E [] array, Comparator<E> comparator) {
-    // TODO: Student, implement this.
+
+    if (array == null) {
+      throw new IllegalArgumentException("Given array cannot be null");
+    }
+
+    int length = array.length;
+    if (length < 2) {
+      return;
+    }
+
+    int middle =  length / 2;
+    E[] firstHalf = (E[]) new Comparable[middle];
+    E[] secondHalf = (E[]) new Comparable[length - middle];
+
+    for (int i = 0; i < middle; i++) {
+      firstHalf[i] = array[i];
+    }
+
+    for (int i = middle; i < length; i++) {
+      secondHalf[i - middle] = array[i];
+    }
+
+    fastSort(firstHalf, comparator);
+    fastSort(secondHalf, comparator);
+    mergeComparator(array, firstHalf, secondHalf, comparator);
   }
 
+
+  @SuppressWarnings("unchecked")
   public static <E> void fastSort(E [] array, int fromIndex, int toIndex, Comparator<E> comparator) {
-    // TODO: Student, implement this.
+    
+    if (array == null) {
+      throw new IllegalArgumentException("Given array cannot be null");
+    }
+
+    int length = array.length;
+    if (length < 2) {
+      return;
+    }
+    
+    if (fromIndex < 0 || fromIndex >= length || toIndex < fromIndex || toIndex > length ) {
+      throw new IllegalArgumentException("Invalid given indexes");
+    }
+
+    int middle = (fromIndex + toIndex) / 2;
+    E[] firstHalf = (E[]) new Comparable[middle - fromIndex];
+    E[] secondHalf = (E[]) new Comparable[toIndex - middle];
+
+    int initialArrayIndex = 0;
+    for (int i = 0; i < firstHalf.length; i++, initialArrayIndex++) {
+      firstHalf[i] = array[initialArrayIndex];
+    }
+    for (int i = 0; i < secondHalf.length; i++, initialArrayIndex++) {
+      secondHalf[i] = array[initialArrayIndex];
+    }
+    
+    fastSort(array, fromIndex, toIndex, comparator);
+    fastSort(array, fromIndex, toIndex, comparator);
+     
+    mergeComparator(array, firstHalf, secondHalf, comparator);
   }
 
 
@@ -316,6 +374,39 @@ public class Algorithms {
     while(indexFirst < sizeFirst && indexSecond < sizeSecond) {
       // if firsthalf is less than equal to 
       if(firstHalf[indexFirst].compareTo(secondHalf[indexSecond]) <= 0) {
+        initialArray[indexInitial] = firstHalf[indexFirst];
+        ++indexFirst;
+      } else {
+        initialArray[indexInitial] = secondHalf[indexSecond];
+        ++indexSecond;
+      }
+      ++indexInitial;
+    } 
+    while(indexFirst < sizeFirst) {
+      initialArray[indexInitial] = firstHalf[indexFirst];
+      ++indexFirst;
+      ++indexInitial;
+    }
+    while(indexSecond < sizeSecond) {
+      initialArray[indexInitial] = secondHalf[indexSecond];
+      ++indexSecond;
+      ++indexInitial;
+    }
+  }
+
+
+  private static <E> void mergeComparator(E[] initialArray, E[] firstHalf, E[] secondHalf, Comparator<E> comparator) {
+    
+    int sizeFirst = firstHalf.length;
+    int sizeSecond = secondHalf.length;
+
+    int indexFirst = 0;
+    int indexSecond = 0;
+    int indexInitial = 0;
+
+    while(indexFirst < sizeFirst && indexSecond < sizeSecond) {
+
+      if (comparator.compare(firstHalf[indexFirst], secondHalf[indexSecond]) <= 0) {
         initialArray[indexInitial] = firstHalf[indexFirst];
         ++indexFirst;
       } else {

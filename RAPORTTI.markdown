@@ -139,8 +139,12 @@ Kun linkitettyä listaa ja taulukkopohjaista jonoa vertailee, niitä kannattaa v
 
 Kaikki jonon metodit täyttävät tehtävän aikavaatimukset. Hitaimmat aikakompleksisuudet löytyvät metodeista ```toString()``` joka iteroi listan jokaisen jäsenen O(n), sekä ```enqueue()``` jonka aikakompleksisuus on reallokoinnin tapauksessa **O(n)** - muuten sen ollessa **O(1)**.
 
+# TÄMÄN TASKIN OIKEELLISUUS!
 
 ## 06-TASK
+
+Tehtävässä toteutin ja opin merge sort lajittelualgoritmin. Mutkikkainta tehtävässä oli listan kokoaminen takaisin. Törmäsin tehtävässä myös suuren tilakompleksisuuden ongelmiin - oli pelottavaa ensimmäistä kertaa törmätä stack overflow ja heap space erroriin. 
+
 
 ## 07-TASK
 
