@@ -1,8 +1,6 @@
 package oy.interact.tira.student;
 
-import java.io.Console;
 import java.util.Comparator;
-import java.util.Random;
 
 public class Algorithms {
 
@@ -221,6 +219,22 @@ public class Algorithms {
     return -1;   // If not found, return -1
    }
 
+   public static <T extends Comparable<T>> int binarySearchRecursive(T aValue, T[] fromArray, int fromIndex, int toIndex) {
+
+    if (fromIndex > toIndex) {
+      return -1;
+    }
+  
+    int middle = (fromIndex + toIndex) / 2;
+  
+    if (aValue.compareTo(fromArray[middle]) < 0) {
+      return binarySearchRecursive(aValue, fromArray, fromIndex, middle - 1);
+    } else if (aValue.compareTo(fromArray[middle]) > 0) {
+      return binarySearchRecursive(aValue, fromArray, middle + 1, toIndex);
+    } else {
+      return middle;
+    }
+  }
 
    ///////////////////////////////////////////
    // Binary search using a Comparator
@@ -262,15 +276,174 @@ public class Algorithms {
     
     return -1;
    }
+   
+   public static <T> int binarySearchRecursive(T aValue, T[] fromArray, int fromIndex, int toIndex, Comparator<T> comparator) {
 
-  //TODO: Recursive binary search with Comparator
-  // Remember to mention in the report!
+    if (fromIndex > toIndex) {
+      return -1;
+    }
 
-   // Fix stack overflow!
-   // Fix heap overflow!
-  @SuppressWarnings("unchecked")
+    int middle = (fromIndex + toIndex) / 2;
+
+    if (fromArray[middle] == null) {
+      return -1;
+    }
+
+    if (comparator.compare(aValue, fromArray[middle]) < 0) {
+      return binarySearchRecursive(aValue, fromArray, fromIndex, middle - 1, comparator);
+    } else if (comparator.compare(aValue, fromArray[middle]) > 0) {
+      return binarySearchRecursive(aValue, fromArray, middle + 1, toIndex, comparator);
+    } else {
+      return middle;
+    }
+  }
+
   public static <E extends Comparable<E>> void fastSort(E [] array) {
+    mergeSort(array);
+    //heapSort(array);
+    
+  }
 
+  public static <E extends Comparable<E>> void fastSort(E [] array, Comparator<E> comparator) {
+    mergeSort(array, comparator);
+    //heapSort(array, comparator);
+  }
+
+
+  // Tässä funktiossa bugi! :D
+  // Kun kaksi vähintään kahden olion listaa yhdistyy, ne eivät yhdisty oikein :( 
+  public static <E extends Comparable<E>> void fastSort(E [] array, int fromIndex, int toIndex, Comparator<E> comparator) {
+    mergeSort(array, fromIndex, toIndex, comparator);
+    //heapSort(array, fromIndex, toIndex, comparator);
+  }
+
+
+  ////// HEAP SORT ///////
+
+  private static <E extends Comparable<E>> void heapSort(E[] array) {
+    int length = array.length;
+
+    for (int i = length / 2 - 1; i >= 0; i--) {
+        heapify(array, length, i);
+    }
+
+    for (int i = length - 1; i > 0; i--) {
+        E temp = array[0];
+        array[0] = array[i];
+        array[i] = temp;
+
+        heapify(array, i, 0);
+    }
+  }
+
+  
+  private static <E extends Comparable<E>> void heapSort(E[] array, Comparator<E> comparator) {
+    int length = array.length;
+
+    for (int i = length / 2 - 1; i >= 0; i--) {
+        heapify(array, length, i);
+    }
+
+    for (int i = length - 1; i > 0; i--) {
+        E temp = array[0];
+        array[0] = array[i];
+        array[i] = temp;
+
+        heapify(array, i, 0, comparator);
+    }
+  }
+
+  private static <E extends Comparable<E>> void heapSort(E[] array, int fromIndex,  int toIndex, Comparator<E> comparator) {
+    int n = toIndex - fromIndex + 1;
+
+    // Build heap (rearrange array)
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(array, n, i, fromIndex, comparator);
+    }
+
+    // One by one extract an element from heap
+    for (int i = n - 1; i > 0; i--) {
+        // Move the current root to the end
+        E temp = array[fromIndex];
+        array[fromIndex] = array[fromIndex + i];
+        array[fromIndex + i] = temp;
+
+        // Call max heapify on the reduced heap
+        heapify(array, i, fromIndex, fromIndex, comparator);
+    }
+  }
+
+  private static <E extends Comparable<E>> void heapify(E[] array, int n, int i) {
+    int largest = i; 
+    int left = 2 * i + 1; 
+    int right = 2 * i + 2; 
+
+    if (left < n && array[left].compareTo(array[largest]) > 0) {
+        largest = left;
+    }
+
+    if (right < n && array[right].compareTo(array[largest]) > 0) {
+        largest = right;
+    }
+
+    if (largest != i) {
+        E temp = array[i];
+        array[i] = array[largest];
+        array[largest] = temp;
+    
+        heapify(array, n, largest);
+    }
+  }
+
+  private static <E extends Comparable<E>> void heapify(E[] array, int n, int i, Comparator<E> comparator) {
+    int largest = i; 
+    int left = 2 * i + 1; 
+    int right = 2 * i + 2; 
+
+    if (left < n && comparator.compare(array[left], array[largest]) > 0) {
+        largest = left;
+    }
+
+    if (right < n && comparator.compare(array[right], array[largest]) > 0) {
+        largest = right;
+    }
+
+    if (largest != i) {
+        E temp = array[i];
+        array[i] = array[largest];
+        array[largest] = temp;
+    
+        heapify(array, n, largest);
+    }
+  }
+
+  private static <E extends Comparable<E>> void heapify(E[] array, int n, int i, int fromIndex, Comparator<E> comparator) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && comparator.compare(array[fromIndex + left], array[fromIndex + largest]) > 0) {
+      largest = left;
+    }
+
+    if (right < n && comparator.compare(array[fromIndex + right], array[fromIndex + largest]) > 0) {
+      largest = right;
+    }
+
+    if (largest != i) {
+      E swap = array[fromIndex + i];
+      array[fromIndex + i] = array[fromIndex + largest];
+      array[fromIndex + largest] = swap;
+
+      heapify(array, n, largest, fromIndex, comparator);
+    }
+  }
+
+  ///////// MERGE SORT ////////////
+
+  @SuppressWarnings("unchecked")
+  private static <E extends Comparable<E>> void mergeSort(E[] array) {
+    
     if (array == null) {
       return;
     }
@@ -286,21 +459,25 @@ public class Algorithms {
 
 
     for (int i = 0; i < middle; i++) {
-      firstHalf[i] = array[i];
+      if (firstHalf[i] != null) {
+        firstHalf[i] = array[i];
+      }
     }
 
     for (int i = middle; i < length; i++) {
-      secondHalf[i - middle] = array[i];
+      if (secondHalf[i] != null) {
+        secondHalf[i - middle] = array[i];
+      }
     }
 
-    fastSort(firstHalf);
-    fastSort(secondHalf);
+    mergeSort(firstHalf);
+    mergeSort(secondHalf);
     merge(array, firstHalf, secondHalf);
   }
 
-  @SuppressWarnings("unchecked")
-  public static <E> void fastSort(E [] array, Comparator<E> comparator) {
 
+  @SuppressWarnings("unchecked")
+  private static <E> void mergeSort(E[] array, Comparator<E> comparator) {
     if (array == null) {
       throw new IllegalArgumentException("Given array cannot be null");
     }
@@ -315,87 +492,71 @@ public class Algorithms {
     E[] secondHalf = (E[]) new Comparable[length - middle];
 
     for (int i = 0; i < middle; i++) {
-      firstHalf[i] = array[i];
+      if (array[i] != null) {
+        firstHalf[i] = array[i];
+      }
     }
 
     for (int i = middle; i < length; i++) {
-      secondHalf[i - middle] = array[i];
+      if (array[i] != null) {
+        secondHalf[i - middle] = array[i];
+      }
     }
 
-    fastSort(firstHalf, comparator);
-    fastSort(secondHalf, comparator);
-    mergeComparator(array, firstHalf, secondHalf, comparator);
+    mergeSort(firstHalf, comparator);
+    mergeSort(secondHalf, comparator);
+    merge(array, firstHalf, secondHalf, comparator);
   }
 
-
   @SuppressWarnings("unchecked")
-  public static <E> void fastSort(E [] array, int fromIndex, int toIndex, Comparator<E> comparator) {
+  private static <E> void mergeSort(E [] array, int fromIndex, int toIndex, Comparator<E> comparator) {
     
     if (array == null) {
       throw new IllegalArgumentException("Given array cannot be null");
     }
 
-    int length = array.length;
+    int length = toIndex - fromIndex + 1;
     if (length < 2) {
       return;
     }
     
-    if (fromIndex < 0 || fromIndex >= length || toIndex < fromIndex || toIndex > length ) {
+    if (fromIndex < 0 || toIndex < fromIndex || (toIndex - fromIndex > length) ) {
       throw new IllegalArgumentException("Invalid given indexes");
     }
 
     int middle = (fromIndex + toIndex) / 2;
-    E[] firstHalf = (E[]) new Comparable[middle - fromIndex];
-    E[] secondHalf = (E[]) new Comparable[toIndex - middle];
-
-    int initialArrayIndex = 0;
-    for (int i = 0; i < firstHalf.length; i++, initialArrayIndex++) {
-      firstHalf[i] = array[initialArrayIndex];
+    int sizeFirstHalf = middle - fromIndex;
+    if (length == 2) {
+      sizeFirstHalf = 1;
     }
-    for (int i = 0; i < secondHalf.length; i++, initialArrayIndex++) {
-      secondHalf[i] = array[initialArrayIndex];
+    int sizeSecondHalf = toIndex - middle;
+    E[] firstHalf = (E[]) new Object[sizeFirstHalf];
+    E[] secondHalf = (E[]) new Object[sizeSecondHalf];
+
+    
+    for (int i = 0; i < sizeFirstHalf; i++) {
+      if (array[fromIndex + i] != null) {
+        firstHalf[i] = array[fromIndex + i];
+      }
+    }
+    // Nyt oikein ensimmäinen iteraatio
+    for (int i = 0; i < sizeSecondHalf; i++) {
+      if (array[middle + i] != null) {
+        if (sizeSecondHalf == 1) {
+          secondHalf[i] = array[1];
+        } else {
+          secondHalf[i] = array[middle + i];
+        }
+      }
     }
     
-    fastSort(array, fromIndex, toIndex, comparator);
-    fastSort(array, fromIndex, toIndex, comparator);
-     
-    mergeComparator(array, firstHalf, secondHalf, comparator);
-  }
+    mergeSort(firstHalf, 0, sizeFirstHalf - 1, comparator);
+    mergeSort(secondHalf, 0, sizeSecondHalf - 1, comparator);
 
+    merge(array, firstHalf, secondHalf, comparator);
+  }
 
   private static <E extends Comparable<E>> void merge(E[] initialArray, E[] firstHalf, E[] secondHalf) {
-    int sizeFirst = firstHalf.length;
-    int sizeSecond = secondHalf.length;
-
-    int indexFirst = 0;
-    int indexSecond = 0;
-    int indexInitial = 0;
-
-    while(indexFirst < sizeFirst && indexSecond < sizeSecond) {
-      // if firsthalf is less than equal to 
-      if(firstHalf[indexFirst].compareTo(secondHalf[indexSecond]) <= 0) {
-        initialArray[indexInitial] = firstHalf[indexFirst];
-        ++indexFirst;
-      } else {
-        initialArray[indexInitial] = secondHalf[indexSecond];
-        ++indexSecond;
-      }
-      ++indexInitial;
-    } 
-    while(indexFirst < sizeFirst) {
-      initialArray[indexInitial] = firstHalf[indexFirst];
-      ++indexFirst;
-      ++indexInitial;
-    }
-    while(indexSecond < sizeSecond) {
-      initialArray[indexInitial] = secondHalf[indexSecond];
-      ++indexSecond;
-      ++indexInitial;
-    }
-  }
-
-
-  private static <E> void mergeComparator(E[] initialArray, E[] firstHalf, E[] secondHalf, Comparator<E> comparator) {
     
     int sizeFirst = firstHalf.length;
     int sizeSecond = secondHalf.length;
@@ -406,7 +567,11 @@ public class Algorithms {
 
     while(indexFirst < sizeFirst && indexSecond < sizeSecond) {
 
-      if (comparator.compare(firstHalf[indexFirst], secondHalf[indexSecond]) <= 0) {
+      if (firstHalf[indexFirst] == null || secondHalf[indexSecond] == null) {
+        return;
+      }
+
+      if(firstHalf[indexFirst].compareTo(secondHalf[indexSecond]) < 0) {
         initialArray[indexInitial] = firstHalf[indexFirst];
         ++indexFirst;
       } else {
@@ -427,5 +592,39 @@ public class Algorithms {
     }
   }
 
+  private static <E> void merge(E[] initialArray, E[] firstHalf, E[] secondHalf, Comparator<E> comparator) {
+    
+    int sizeFirst = firstHalf.length;
+    int sizeSecond = secondHalf.length;
 
+    int indexFirst = 0;
+    int indexSecond = 0;
+    int indexInitial = 0;
+
+    while(indexFirst < sizeFirst && indexSecond < sizeSecond) {
+
+      if (firstHalf[indexFirst] == null || secondHalf[indexSecond] == null) {
+        return;
+      }
+
+      if (comparator.compare(firstHalf[indexFirst], secondHalf[indexSecond]) < 0) {
+        initialArray[indexInitial] = firstHalf[indexFirst];
+        ++indexFirst;
+      } else {
+        initialArray[indexInitial] = secondHalf[indexSecond];
+        ++indexSecond;
+      }
+      ++indexInitial;
+    } 
+    while(indexFirst < sizeFirst) {
+      initialArray[indexInitial] = firstHalf[indexFirst];
+      ++indexFirst;
+      ++indexInitial;
+    }
+    while(indexSecond < sizeSecond) {
+      initialArray[indexInitial] = secondHalf[indexSecond];
+      ++indexSecond;
+      ++indexInitial;
+    }
+  }
 }

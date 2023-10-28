@@ -94,7 +94,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
 
 		if (sorted) {
 			// Does not work until binary search has been implemented.
-			foundIndex = Algorithms.binarySearch(element, (E[]) array, 0, count);
+			foundIndex = Algorithms.binarySearchRecursive(element, (E[]) array, 0, count);
 			if (foundIndex >= 0) {
 				found = (E) array[foundIndex];
 				array[foundIndex] = null;
@@ -227,7 +227,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
     if (array == null || array.length == 0) {
       return;
     }  
-    Algorithms.insertionSort(array, 0, (array.length - 1));
+    Algorithms.fastSort(array);
     sorted = true;
 	}
 
@@ -237,7 +237,7 @@ public class SimpleContainer<E extends Comparable<E>> implements TIRAContainer<E
     if (array == null || array.length == 0) {
       return;
     }
-    Algorithms.insertionSort(array, 0, (array.length - 1), usingComparator);
+    Algorithms.fastSort(array, usingComparator);
     sorted = true;
 	}
 

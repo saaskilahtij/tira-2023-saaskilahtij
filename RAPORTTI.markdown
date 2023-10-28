@@ -87,8 +87,6 @@ Kirjoita havainnoistasi ja analyysistäsi miksi näin käy, raportiisi.
 Miksi jompi kumpi haku on nopeampi, ja onko sillä väliä haetaanko aineiston alusta vai lopusta? Pohdi ja perustele.
 ```
 
-# Analysoi nää!
-
 ### Puolitushaun aineiston (n) suhde täyttöaikaan (ms)
 ![Puolitushaun täyttöaika O(n) graafi](/src/main/resources/images/binary_search/binary_search_fill.png)
 - Puolitushaun testiä ajettaessa täyttöaika ei ole ihmeellinen. Täyttöalgoritmin O(n) graafi alkaa näyttämään lätkämailalta, joka kertoo aikatehokkuudeksi O(n^2). 
@@ -104,6 +102,8 @@ Miksi jompi kumpi haku on nopeampi, ja onko sillä väliä haetaanko aineiston a
 ### Puolitushaun aineiston (n) suhde operaatioiden aikaan (ms)
 ![Puolitushaun total O(n) graafi](/src/main/resources/images/binary_search/binary_search_graph.png)
 - Kokonaisaika ei ole myöskään yllättävä, sillä siinä kolme ylemmäistä graafia lisätään yhdeksi graafiksi. Siinä voidaan nähdä O(n^2) aikakompleksisuus, jota kuitenkin loiventaa puolitushaun O(log2 n) aikatehokkuus. Myös puolitushaun tehottomuuden pienemmille tietomäärille voi nähdä graafista.
+
+### Toteutin puolitushaun myös rekursiivisesti :)
 
 ## 04-TASK
 
@@ -139,12 +139,16 @@ Kun linkitettyä listaa ja taulukkopohjaista jonoa vertailee, niitä kannattaa v
 
 Kaikki jonon metodit täyttävät tehtävän aikavaatimukset. Hitaimmat aikakompleksisuudet löytyvät metodeista ```toString()``` joka iteroi listan jokaisen jäsenen O(n), sekä ```enqueue()``` jonka aikakompleksisuus on reallokoinnin tapauksessa **O(n)** - muuten sen ollessa **O(1)**.
 
-# TÄMÄN TASKIN OIKEELLISUUS!
 
 ## 06-TASK
 
-Tehtävässä toteutin ja opin merge sort lajittelualgoritmin. Mutkikkainta tehtävässä oli listan kokoaminen takaisin. Törmäsin tehtävässä myös suuren tilakompleksisuuden ongelmiin - oli pelottavaa ensimmäistä kertaa törmätä stack overflow ja heap space erroriin. 
+Tehtävässä toteutin ja opin merge sort, sekä heap sort lajittelualgoritmin. Mutkikkainta tehtävässä oli listan kokoaminen takaisin. Törmäsin tehtävässä myös suuren tilakompleksisuuden ongelmiin - oli pelottavaa ensimmäistä kertaa törmätä stack overflow ja heap space erroriin. Erityisen vaikeaa oli yrittää toteuttaa fromIndex toIndex comparatorilla, enkä jostain syystä saanut kummankaan algoritmin toteutusta kahdesta testistä läpi. :( Debuggasin tehtävää hulluuden partaalle, mutta en millään löytänyt bugia. Onkojan vika omassa comparator toteutuksessa? SimpleContainer luokassa kutsuin ```fastSort(E[] array, Comparator<E> comparator)``` metodia ```fastSort(E[] array, fromIndex, toIndex, Comparator<E> comparator)``` sijasta. Onko näitä tehtäviä mahdollista myöhemmin korjata? Algoritmien toimintaperiaatteet tulivat hyvin tutuiksi debuggerilla niissä ryömiessä.
 
+TODO: Analysoi testien CodersSlowComparatorTests ja CodersFastComparatorTests avulla hitaan lisäyslajittelun ja toteuttamasi nopean (tai nopeiden) algoritmien nopeuseroja. Arvioi algoritmien aikakompleksisuusluokkaa testin tulostamien aikamittausten, koodin ja kurssin teorian perusteella. Raportoi näistä havaintosi ja näkemyksesi perustellen analyysisi tulokset.
+
+**Sisällytä** raporttiin testien tulostamat aikamittaukset algoritmien suoritusnopeudesta omalla koneellasi. Arvioi algoritmien nopeuseroja toisiinsa, ja perustele miksi kukin on toistensa suhteen hitaampi tai nopeampi algoritmi.
+
+Analysoi myös sitä, mitä eroja löysit eri algoritmien aikatehokkuudesta pienien ja isojen aineiston välillä? Jos toteutit useamman nopean lajittelualgoritmin, suorita testiä nopean lajittelualgoritmin ison aineiston testiä jokaisen toteuttamasi algoritmin kanssa, ja raportoi myös algoritmien aikatehokkuuseroista, perustellen miksi joku algoritmi on mielestäsi nopeampi kuin toinen, tämän aineiston kanssa.
 
 ## 07-TASK
 
