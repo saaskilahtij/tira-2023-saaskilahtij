@@ -161,10 +161,7 @@ Miten ´´´mergeSort()``` ja ```heapSort()``` eroavat toisistaan, on ```heapSor
 ### Kaavio ```mergeSort()``` suorituskyvystä:
 ![Merge sort O(n) graafi](/src/main/resources/images/merge_sort/merge_sort_fast_test.png)
 
-
-**Sisällytä** raporttiin testien tulostamat aikamittaukset algoritmien suoritusnopeudesta omalla koneellasi. Arvioi algoritmien nopeuseroja toisiinsa, ja perustele miksi kukin on toistensa suhteen hitaampi tai nopeampi algoritmi.
-
-Analysoi myös sitä, mitä eroja löysit eri algoritmien aikatehokkuudesta pienien ja isojen aineiston välillä? Jos toteutit useamman nopean lajittelualgoritmin, suorita testiä nopean lajittelualgoritmin ison aineiston testiä jokaisen toteuttamasi algoritmin kanssa, ja raportoi myös algoritmien aikatehokkuuseroista, perustellen miksi joku algoritmi on mielestäsi nopeampi kuin toinen, tämän aineiston kanssa.
+Funktiokutsut voivat olla hieman miten sattuu, sillä en ehtinyt korjata bugeja ennen määräaikaa. Jos algoritmejä millään voi korjata deadlinen jälkeen, korjaisin ne mielelläni. :)
 
 ## 07-TASK
 

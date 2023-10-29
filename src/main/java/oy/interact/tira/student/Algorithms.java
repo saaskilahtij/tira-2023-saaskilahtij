@@ -299,8 +299,8 @@ public class Algorithms {
   }
 
   public static <E extends Comparable<E>> void fastSort(E [] array) {
-    mergeSort(array);
-    //heapSort(array);
+    //mergeSort(array);
+    heapSort(array);
     
   }
 
