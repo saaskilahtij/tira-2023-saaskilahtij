@@ -310,8 +310,6 @@ public class Algorithms {
   }
 
 
-  // Tässä funktiossa bugi! :D
-  // Kun kaksi vähintään kahden olion listaa yhdistyy, ne eivät yhdisty oikein :( 
   public static <E extends Comparable<E>> void fastSort(E [] array, int fromIndex, int toIndex, Comparator<E> comparator) {
     mergeSort(array, fromIndex, toIndex, comparator);
     //heapSort(array, fromIndex, toIndex, comparator);
@@ -324,15 +322,16 @@ public class Algorithms {
     int length = array.length;
 
     for (int i = length / 2 - 1; i >= 0; i--) {
-        heapify(array, length, i);
+      heapify(array, length, i);
     }
 
     for (int i = length - 1; i > 0; i--) {
-        E temp = array[0];
-        array[0] = array[i];
-        array[i] = temp;
+      E temp = array[0];
+      
+      array[0] = array[i];
+      array[i] = temp;
 
-        heapify(array, i, 0);
+      heapify(array, i, 0);
     }
   }
 
@@ -341,35 +340,33 @@ public class Algorithms {
     int length = array.length;
 
     for (int i = length / 2 - 1; i >= 0; i--) {
-        heapify(array, length, i);
+      heapify(array, length, i);
     }
 
     for (int i = length - 1; i > 0; i--) {
-        E temp = array[0];
-        array[0] = array[i];
-        array[i] = temp;
+      E temp = array[0];
+      
+      array[0] = array[i];
+      array[i] = temp;
 
-        heapify(array, i, 0, comparator);
+      heapify(array, i, 0, comparator);
     }
   }
 
   private static <E extends Comparable<E>> void heapSort(E[] array, int fromIndex,  int toIndex, Comparator<E> comparator) {
     int n = toIndex - fromIndex + 1;
 
-    // Build heap (rearrange array)
     for (int i = n / 2 - 1; i >= 0; i--) {
-        heapify(array, n, i, fromIndex, comparator);
+      heapify(array, n, i, fromIndex, comparator);
     }
 
-    // One by one extract an element from heap
     for (int i = n - 1; i > 0; i--) {
-        // Move the current root to the end
-        E temp = array[fromIndex];
-        array[fromIndex] = array[fromIndex + i];
-        array[fromIndex + i] = temp;
+      E temp = array[fromIndex];
+      
+      array[fromIndex] = array[fromIndex + i];
+      array[fromIndex + i] = temp;
 
-        // Call max heapify on the reduced heap
-        heapify(array, i, fromIndex, fromIndex, comparator);
+      heapify(array, i, fromIndex, fromIndex, comparator);
     }
   }
 
@@ -379,19 +376,20 @@ public class Algorithms {
     int right = 2 * i + 2; 
 
     if (left < n && array[left].compareTo(array[largest]) > 0) {
-        largest = left;
+      largest = left;
     }
 
     if (right < n && array[right].compareTo(array[largest]) > 0) {
-        largest = right;
+      largest = right;
     }
 
     if (largest != i) {
-        E temp = array[i];
-        array[i] = array[largest];
-        array[largest] = temp;
+      E temp = array[i];
+      
+      array[i] = array[largest];
+      array[largest] = temp;
     
-        heapify(array, n, largest);
+      heapify(array, n, largest);
     }
   }
 
@@ -401,19 +399,20 @@ public class Algorithms {
     int right = 2 * i + 2; 
 
     if (left < n && comparator.compare(array[left], array[largest]) > 0) {
-        largest = left;
+      largest = left;
     }
 
     if (right < n && comparator.compare(array[right], array[largest]) > 0) {
-        largest = right;
+      largest = right;
     }
 
     if (largest != i) {
-        E temp = array[i];
-        array[i] = array[largest];
-        array[largest] = temp;
+      E temp = array[i];
     
-        heapify(array, n, largest);
+      array[i] = array[largest];
+      array[largest] = temp;
+    
+      heapify(array, n, largest);
     }
   }
 
@@ -432,6 +431,7 @@ public class Algorithms {
 
     if (largest != i) {
       E swap = array[fromIndex + i];
+      
       array[fromIndex + i] = array[fromIndex + largest];
       array[fromIndex + largest] = swap;
 
@@ -505,6 +505,7 @@ public class Algorithms {
 
     mergeSort(firstHalf, comparator);
     mergeSort(secondHalf, comparator);
+    
     merge(array, firstHalf, secondHalf, comparator);
   }
 

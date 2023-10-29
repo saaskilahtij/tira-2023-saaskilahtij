@@ -146,6 +146,22 @@ Tehtävässä toteutin ja opin merge sort, sekä heap sort lajittelualgoritmin. 
 
 TODO: Analysoi testien CodersSlowComparatorTests ja CodersFastComparatorTests avulla hitaan lisäyslajittelun ja toteuttamasi nopean (tai nopeiden) algoritmien nopeuseroja. Arvioi algoritmien aikakompleksisuusluokkaa testin tulostamien aikamittausten, koodin ja kurssin teorian perusteella. Raportoi näistä havaintosi ja näkemyksesi perustellen analyysisi tulokset.
 
+```mergeSort()``` aikakompleksisuutta tarkasteltaessa algoritmin voi jakaa kahteen eri osaan: 1. jakaminen, 2. vertailu ja 3. yhdistäminen muodostaen kauniin timanttisen puun <3. Jakamisvaiheessa algoritmi jakaa aineistoa puoliksi niin kauan, että jaetuista aineistoista löytyy ainoastaan yksi elementti. Koska algoritmi jakaa aineistoa binäärisesti, saadaan jakamisen aikakompleksisuudeksi **O(log n)**. Vertailussa ja yhdistämisessä jaettujen aineistojen elementtejä vertaillaan jonka jälkeen ne yhdistetään taas järjestetyksi isommaksi listaksi. Koska tässä operaatiossa jaettu aineisto A ja jaettu aineisto B ovat jo lajiteltuja, algoritmi iteroi ainoastaan listan B läpi etsiessään vertailtavalle listan A elementille paikkaa. Algoritmi loistaa, koska molemmat listat ovat jo valmiiksi lajiteltuja ja tästä saadaan operaation aikakompleksisuudeksi **O(n)**. Kun yhdistetään jakamisen aikakompleksisuus **O(log n)** vertailun ja yhdistämisen **O(n)** aikakompleksisuuden kanssa, saadaan kokonais aikakompleksisuudeksi **O(n log n)**, joka on merkittävästi nopeampi kuin ```insertionSort()``` algoritmin aikakompleksisuus **O(n^2)**. Perspektiivinä miljoonan **log** on kuusi, joka tarkoittaa ```miljoona * 6```, kun taas ```insertionSort()``` algoritmista saadaan ```miljoona * miljoona```. 
+
+Kun tarkastellaan algoritmia ```heapSort()```, voidaan nähdä kuinka se ensin rakentaa binäärisen puun (keko) jaettuja listoja ja lähtee sitten vertailemaan binääristen jaettujen listojen elementtejä. Jaetun listan suurempi elementti "nostetaan puussa korkeammalle" vaihtamalla sen paikka vanhemman elementin kanssa, jos se on vanhempaa elementtiä suurempi. Tätä toistetaan niin kauan, että suurin elementti on nostettu listan vanhimmaksi elementiksi. Algoritmi varmistaa, että vanhin elementti on suurin ja poistaa sen sitten puusta, toisin sanoen lisää sen listan viimeiseksi jäseneksi. Tämän jälkeen keko järjestetään uudelleen kunnes suurin elementti löydetään taas vanhimman paikalta. Kun analysoidaan algoritmin aikakompleksisuutta, voidaan nähdä kuinka binäärisen puun teossa ensimmäinen ```for``` silmukka jakaa aineiston noin **n/2** kertaa jaetuiksi aineistoiksi, jolloin tämän operaation aikakompleksisuudeksi saadaan **O(n)** vakion 2 pudottua. Algoritmin vertaillessa ja hakiessa suurinta arvoa, sen aikakompleksisuus on **O(log n)** ja kun molempien operaatioiden aikakompleksisuudet yhdistetään, saadaan aikakompleksisuudeksi **O(n log n)**. Tämä päihittää myös ```insertionSort()``` algoritmin **O(n)** aikakompleksisuuden.
+
+Miten ´´´mergeSort()``` ja ```heapSort()``` eroavat toisistaan, on ```heapSort()``` algoritmin tilaystävällisyys, joka hoitaa lajittelun käyttämättä "ylimääräistä" muistia, kun taas ```mergeSort()``` vaatii ylimääräisiä taulukkoja aineiston jakoon. Jos tila tulee olemaan ongelma, kannattaa käyttää ```heapSort()``` algoritmia.
+
+
+
+### Kaavio ```insertionSort()``` suorituskyvystä:
+![Lisäyslajittelun O(n) graafi](/src/main/resources/images/insertion_sort/insertion_sort_slow_test.png)
+
+
+### Kaavio ```mergeSort()``` suorituskyvystä:
+![Merge sort O(n) graafi](/src/main/resources/images/merge_sort/merge_sort_fast_test.png)
+
+
 **Sisällytä** raporttiin testien tulostamat aikamittaukset algoritmien suoritusnopeudesta omalla koneellasi. Arvioi algoritmien nopeuseroja toisiinsa, ja perustele miksi kukin on toistensa suhteen hitaampi tai nopeampi algoritmi.
 
 Analysoi myös sitä, mitä eroja löysit eri algoritmien aikatehokkuudesta pienien ja isojen aineiston välillä? Jos toteutit useamman nopean lajittelualgoritmin, suorita testiä nopean lajittelualgoritmin ison aineiston testiä jokaisen toteuttamasi algoritmin kanssa, ja raportoi myös algoritmien aikatehokkuuseroista, perustellen miksi joku algoritmi on mielestäsi nopeampi kuin toinen, tämän aineiston kanssa.
