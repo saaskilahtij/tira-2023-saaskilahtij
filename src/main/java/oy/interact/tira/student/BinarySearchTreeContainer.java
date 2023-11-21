@@ -34,6 +34,9 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
 
   // Declaration of the root node
   Node root = null;
+  
+  // Tree capacity 
+  int capacity = Integer.MAX_VALUE; 
 
   @Override
   public void add(K key, V value) throws OutOfMemoryError, IllegalArgumentException {
@@ -105,29 +108,52 @@ public class BinarySearchTreeContainer<K extends Comparable<K>, V> implements TI
 
   @Override
   public int capacity() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'capacity'");
+    return capacity;
   }
+
 
   @Override
   public void ensureCapacity(int capacity) throws OutOfMemoryError, IllegalArgumentException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'ensureCapacity'");
+    this.capacity = capacity;
   }
 
   @Override
   public void clear() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'clear'");
+    clearTree(root);
+    root = null;
+  }
+
+  private void clearTree(Node node) {
+    if (node == null) {
+      return;
+    }
+
+    clearTree(node.right);
+    clearTree(node.left);
+    
+    node.key = null;
+    node.value = null;
+    node.right = null;
+    node.left = null;
+    node.parent = null;
+    capacity = Integer.MAX_VALUE;
   }
 
   @Override
   public Pair<K, V>[] toArray() throws Exception {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+    Pair<K,V> [] array = new Pair[size()];
+    fillArray(root, 0, array);
+    return array;
   }
 
+  private void fillArray(Node node, int index, Pair<K,V>[] array) {
+    if (node == null) {
+      return;
+    }
+    array[index] = new Pair<>(node.key, node.value);
 
-
+    fillArray(node, index + 1, array);
+    fillArray(node, index - 1, array);
+  }
 
 }
