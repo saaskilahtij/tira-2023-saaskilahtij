@@ -121,7 +121,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
   }
 
 
-  // Ei vielä päivitetty ja ei toimi
+  // Ei vielä päivitetty ja ei toimiy
   @Override
   public Pair<K, V> getIndex(int index) throws IndexOutOfBoundsException {
     if (index >= size()) {
