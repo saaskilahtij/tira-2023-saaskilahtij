@@ -29,7 +29,7 @@ public class Coder implements Comparable<Coder> {
 	}
 
 	public Coder(String firstName, String lastName, String phoneNumber) {
-		id = UUID.randomUUID().toString();
+    id = UUID.randomUUID().toString();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.phoneNumber = phoneNumber;
@@ -206,18 +206,31 @@ public class Coder implements Comparable<Coder> {
     return 0;
   }
 
-	/**
-	 * You need to implement this in Exercise 8 on hash tables. No need to implement this before!
-	 * 
-	 * TODO: Students (task 8): Calculate the hash for the Coder. In this case, the hash must be related
-	 * to the unique identity of the coder. Since coders can have a same full name,
-	 * calculate the hash from the permanent id of the Coder, which does not change.
-	 * 
-	 * @return The hash calculated from the id of the Coder.
-	 */
+	/*
+  * @return The hash calculated from the id of the Coder.
+	*/
 	@Override
 	public int hashCode() {
-		return 0;
+    int hash = 22;
+    for (int i = 0; i < id.length(); i++) {
+      hash *= (31 * hash) ^ id.charAt(i);
+    }
+    return hash;
 	}
-	
+
+  public static void main(String[] args) {
+    Coder coder1 = new Coder("Johan", "Sääskilahti", "48954389034");
+    coder1.id = "1233";
+    Coder coder2 = new Coder("Kohan", "Sääskilahti", "48954389034");
+    coder2.id = "1234";
+    Coder coder3 = new Coder("Juhan", "Sääskilahti", "48954389034");
+    coder3.id = "1235";
+    int hash1 = coder1.hashCode();
+    int hash2 = coder2.hashCode();
+    int hash3 = coder3.hashCode();
+    System.out.println(hash1);
+    System.out.println(hash2);
+    System.out.println(hash3);
+  }
+
 }

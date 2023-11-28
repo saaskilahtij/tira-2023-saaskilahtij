@@ -167,4 +167,30 @@ Funktiokutsut voivat olla hieman miten sattuu, sillä en ehtinyt korjata bugeja 
 
 ## 08-TASK
 
+Ensimmäisenä toteutin hajautusfunktion. Tässä tavoitteena oli hajauttaa merkkijono kokonaisluvulliseksi arvoksi mahdollisimman hyvällä entropialla. Olen jo pitkään halunnut oppia bittioperaatioita, joten tehtävä tuntui täydelliseltä haasteelta oppia asia. Opiskelin ja kokeilin ensin yksinkertaisia operaatioita, kuten XOR **^**, AND **&**, OR **|**, sekä bittisiirrot vasemmalle **<<** ja oikealle **>>**. Kuulin että hyvässä hajautusfunktiossa kannattaa käyttää alkulukuja joten valitsin tiivisteen alustukseksi 23 ja kertoimeksi 31. Kun olin jo aika pitkällä hajautusfunktiossa, huomasin, että bittioperaatiot antavat joka kerta eri arvon samalle merkkijonolle. Hikisestä tiedonkeruusta huolimatta en löytänyt vastausta sille miksi. Hieman tämän jälkeen silmäni osui Coder konstruktorin riviin ```id = UUID.randomUUID().toString();```. Tämän jälkeen testailin hajautusfunktion tehokkuutta. Testiaineistolle:
+```Java
+coder1.id = "123456";
+coder2.id = "123457";
+coder3.id = "123458";
+```
+arvoiksi sain:
+```Java
+330884602
+330884603
+330884596
+```
+hajautusfunktio ei ollut tarpeeksi hyvä. Kokeilin eri kombinaatioita ja opiskeltuani hajautusfunktioita törmäsin netissä vertailuun, jossa vertailtiin Bernsteinin, sekä Kernighanin ja Ritchien hajautusfunktioita. Myös näissä ammattimaisissa hajautusfunktioissa oli vain pieniä eroja loppukirjaimen muutoksessa. Päädyin lopulta hajautukseen: 
+```Java
+@Override
+	public int hashCode() {
+    int hash = 22;
+    for (int i = 0; i < id.length(); i++) {
+      hash *= (31 * hash) ^ id.charAt(i);
+    }
+    return hash;
+	}
+```
+Tässä hajautuksessa pyrin priorisoimaan hyvää hajautusta, sekä hajautusfunktion suorituskykyä. Koska id:t eivät ole pitkiä, algoritmin aikakompleksisuus O(n) ei ole ongelma.
+
+
 ## 09-TASK
