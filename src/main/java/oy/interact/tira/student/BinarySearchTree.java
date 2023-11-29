@@ -23,8 +23,6 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
     this.comparator = comparator;
   }
 
-
-  // Children indexing doesn't work!
   @Override
   public void add(K key, V value) throws OutOfMemoryError, IllegalArgumentException {
     if (key == null) {
@@ -39,8 +37,8 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
       root = newNode;
       nodeCount++;
       maxDepth = 0;
-    } else if (root.insert(newNode, root, comparator)) {
-      maxDepth =  Math.max(maxDepth, root.getTreeDepth());
+    } else if (root.insert(newNode, comparator)) {
+      maxDepth = Math.max(maxDepth, root.getTreeDepth());
       nodeCount++;
     }
   }
@@ -53,7 +51,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
     if (root == null) {
       return null;
     }
-    return root.find(key, root, comparator);
+    return root.find(key, comparator);
   }
 
   @Override
@@ -103,7 +101,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
   @SuppressWarnings("unchecked")
   public Pair<K, V>[] toArray() throws Exception {
     Pair<K,V> [] array = new Pair[size()];
-    AtomicInteger index = new AtomicInteger(-1);
+    AtomicInteger index = new AtomicInteger(0);
     if (root == null) {
       return array;
     }
@@ -121,7 +119,6 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
   }
 
 
-  // Ei vielä päivitetty ja ei toimiy
   @Override
   public Pair<K, V> getIndex(int index) throws IndexOutOfBoundsException {
     if (index >= size()) {
@@ -136,7 +133,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
     return getIndexHelper(root, index);
   }
 
-  // Tämä ei toimi koska lasten indeksit ei toimi
+
   private Pair<K,V> getIndexHelper(TreeNode<K, V> node, int indexToFind) {
 
     if (node.getLeftChildren() > indexToFind) {
@@ -155,32 +152,9 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
     if (root == null) {
       return -1;
     }
-    return findIndexHelper(root, searcher, -1);
+    AtomicInteger index = new AtomicInteger(0);
+    return root.findIndexPredicate(index, searcher).get();
   }
-
-  private int findIndexHelper(TreeNode<K,V> node, Predicate<V> searcher, int targetIndex) {
-    int currentIndex = 0;
-    if (node.getLeft() != null) {
-      targetIndex = findIndexHelper(node.getLeft(), searcher, targetIndex);
-      if (targetIndex != -1) {
-        return targetIndex;
-      }
-    }
-    
-    if (searcher.test(node.getValue())) {
-      return currentIndex;
-    }
-    currentIndex++;
-
-    if (node.getRight() != null) {
-      targetIndex = findIndexHelper(node.getRight(), searcher, targetIndex);
-      if (targetIndex != -1) {
-        return targetIndex;
-      }
-    }
-    return targetIndex;
-  }
-
 
   @Override
   public void accept(Visitor<K, V> visitor) throws Exception {

@@ -2,6 +2,7 @@ package oy.interact.tira.model;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+
 import java.util.Comparator;
 import oy.interact.tira.util.Pair;
 
@@ -18,7 +19,8 @@ public class TreeNode<K extends Comparable<K>, V> {
   TreeNode<K,V> rightChild;
   TreeNode<K,V> parentNode;
   // nextNodeKey is for the linked list duplicate
-  K nextNodeKey;
+  TreeNode<K,V> nextNode;
+  AtomicInteger indexHelper = new AtomicInteger(-1);
 
 
   public TreeNode() {}
@@ -28,68 +30,68 @@ public class TreeNode<K extends Comparable<K>, V> {
     this.value = value;
   }
 
-  public boolean insert(TreeNode<K,V> newNode, TreeNode<K,V> parent, Comparator<K> comparator) {
+
+  // Miksi 11 on 109 oikealla puolella testissä GenericTests rivillä 90
+  public boolean insert(TreeNode<K,V> newNode, Comparator<K> comparator) {
     boolean result = false;
 
-    // Jos duplikaatti, tekee linkitetyn listan
-    if (comparator.compare(key, newNode.key) == 0) {
-      parent.nextNodeKey = newNode.key;
+    if (this.value.equals(newNode.value)) {
+      key = newNode.key;
       return false;
     }
 
-    if (comparator.compare(key, newNode.key) < 0) {
-      treeDepth++;
+    if (comparator.compare(newNode.key, key) < 0) {
       if (leftChild == null) {
-        parent.addLeftChild();
-        parent.leftChild = new TreeNode<>(newNode.key, newNode.value);
+        addLeftChild();
+        leftChild = newNode;
         result = true;
       } else {
-        if (leftChild.insert(newNode, parent.leftChild, comparator)) {
-          parent.addLeftChild();
+        if (leftChild.insert(newNode, comparator)) {
+          addLeftChild();
           result = true;
-        } else {
-          result = false;
         }
       }
-    } else if (comparator.compare(key, newNode.key) > 0) {
-      treeDepth++;
+    } else if (comparator.compare(newNode.key, key) > 0) {
       if (rightChild == null) {
-        parent.addRightChild();
-        parent.rightChild = new TreeNode<>(newNode.key, newNode.value);
+        addRightChild();
+        rightChild= newNode;
         result = true;
       } else {
-        if (rightChild.insert(newNode, parent.rightChild, comparator)) {
-          parent.addRightChild();
+        if (rightChild.insert(newNode, comparator)) {
+          addRightChild();
           result = true;
-        } else {
-          result = false;
         }
       }
+    } else {
+      addDuplicateNode(newNode);
+      result = true;
     }
     return result;
   }
 
+  public void addDuplicateNode(TreeNode<K,V> newNode) {
+    if (nextNode == null) {
+      new TreeNode<K,V>(newNode.key, newNode.value);
+      nextNode = newNode;
+    } else {
+      addDuplicateNode(this.nextNode);
+    }
+  }
 
-  // MF find toimii muuten, mutta kaatuu koodarinimiin
-  public V find(K keyToFind, TreeNode<K,V> root, Comparator<K> comparator) {
-    int comparison = comparator.compare(root.key, keyToFind);
+  public V find(K targetKey, Comparator<K> comparator) {
+
     V result = null;
-    if (comparison == 0 || leftChild == null || rightChild == null) {
-      result = root.value;
+    if (comparator.compare(targetKey, key) == 0) {
+      return value;
     }
-
-    if (comparison < 0) {
-      if (leftChild != null) {
-        result = root.find(keyToFind, root.leftChild, comparator);
-      }
-    } else if (comparison > 0){
-      if (rightChild !=  null) {
-        result = root.find(keyToFind, root.rightChild, comparator);
-      }
+    
+    if (comparator.compare(targetKey, key) < 0 && leftChild != null) {
+      result = leftChild.find(targetKey, comparator);
+    } else if (comparator.compare(targetKey, key) > 0 && rightChild != null) {
+      result = rightChild.find(targetKey, comparator);
     }
     return result;
   }
-
 
   public V findPredicate(Predicate<V> searcher) {
 
@@ -115,32 +117,73 @@ public class TreeNode<K extends Comparable<K>, V> {
   public AtomicInteger findIndex(K key, AtomicInteger index) {
 
     if (leftChild != null) {
-      findIndex(key, index);
+      return leftChild.findIndex(key, index);
     } 
 
     if (this.key.equals(key)) {
-      return index;
+      return index; 
     }
     
     index.incrementAndGet();
     if (rightChild != null) {
-      findIndex(key, index);
+      rightChild.findIndex(key, index);
     }
 
     return new AtomicInteger(-1);
   }
 
+  public AtomicInteger findIndexPredicate(AtomicInteger index, Predicate<V> searcher) {
+    
+    if (leftChild != null) {
+      indexHelper = leftChild.findIndexPredicate(index, searcher);
+      if (index.get() != -1) {
+        return indexHelper;
+      }
+    }
+    
+    if (searcher.test(this.value)) {
+      return index;
+    }
+    
+    index.incrementAndGet();
+
+    if (rightChild != null) {
+      indexHelper = rightChild.findIndexPredicate(index, searcher);
+      if (index.get() != -1) {
+        return indexHelper;
+      }
+    }
+    return indexHelper;
+  }
 
   public void makeArray(Pair<K,V>[] array, AtomicInteger index) {
 
     if (leftChild != null) {
       leftChild.makeArray(array, index);
     }
-    index.incrementAndGet();
-    array[index.get()] = new Pair<K,V>(key, value);
+
+    if (nextNode == null) {
+      array[index.get()] = new Pair<K,V>(key, value);
+      index.incrementAndGet();
+    } else {
+      array[index.get()] = new Pair<K,V>(key, value);
+      index.incrementAndGet();
+      traverseLinkedList(array, index, this);
+    }
+
     if (rightChild != null) {
       rightChild.makeArray(array, index);
     }
+  }
+
+  private void traverseLinkedList(Pair<K,V>[] array, AtomicInteger index, TreeNode<K,V> node) {
+
+    if (nextNode == null) {
+      return;
+    }
+    
+    array[index.get()] = new Pair<K,V>(nextNode.key, nextNode.value);
+    index.incrementAndGet();
   }
 
   public K getKey() {
@@ -203,12 +246,8 @@ public class TreeNode<K extends Comparable<K>, V> {
     rightChildren++;
   }
 
-  public K getNextNodeKey() {
-    return nextNodeKey;
-  }
-
-  public void setNextNodeKey(K nextNodeKey) {
-    this.nextNodeKey = nextNodeKey;
+  public TreeNode<K,V> getNextNode() {
+    return nextNode;
   }
 
 }
