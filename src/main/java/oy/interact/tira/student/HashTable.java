@@ -8,36 +8,74 @@ import oy.interact.tira.util.TIRAKeyedContainer;
 public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer<K,V>{
 
   int size;
-  final int CAPACITY = 500000;
+  final int CAPACITY = 32;
+
+  private class LinkedListNode<T,R> {
+    Pair<K,V> nodeData;
+    LinkedListNode<T,R> nextNode;
+
+    LinkedListNode(K key, V value) {
+      nodeData = new Pair<>(key, value);
+    }
+  }
+  
   @SuppressWarnings("unchecked")
-  Pair<K,V> [] array = new Pair[CAPACITY];
-
-  /* 
-    Käytä törmäyksessä linkitettyä listaa!
-  */
+  LinkedListNode<K,V> [] array = new LinkedListNode[CAPACITY];
+  LinkedListNode<K,V> headNode;
 
   @Override
-  public void add(Comparable key, Object value) throws OutOfMemoryError, IllegalArgumentException {
+  public void add(K key, V value) throws OutOfMemoryError, IllegalArgumentException {
+    int index = key.hashCode() % CAPACITY;
+    LinkedListNode<K,V> newNode = new LinkedListNode<>(key, value);
+
+    if (array[index] == null) {
+      array[index] = newNode;
+      headNode = newNode;
+    } else {
+      addToLinkedList(array[index], newNode);
+    }
+  }
+
+
+  private void addToLinkedList(LinkedListNode<K,V> current, LinkedListNode<K,V> newNode) {
+    if (current.nextNode == null) {
+      current.nextNode = newNode;
+    } else {
+      addToLinkedList(current.nextNode, newNode);
+    }
+  }
+
+
+  @Override
+  public V get(K key) throws IllegalArgumentException {
+    int index = key.hashCode() % CAPACITY;
+
+    if (array[index] != null) {
+      return findFromLinkedList(array[index], key);
+    }
+    return null;
+  }
+
+  private V findFromLinkedList(LinkedListNode<K,V> current, K key) {
+    if (current.nodeData.getKey().equals(key)) {
+      return current.nodeData.getValue();
+    } else {
+      findFromLinkedList(current.nextNode, key);
+    }
+    return null;
+  }
+
+
+  @Override
+  public V remove(Comparable key) throws IllegalArgumentException {
     
-    // index = calculateIndexFor(value);
-    // A[index] = e
-    // return true;
+    // Here I need to do LinkedList removal
+
+    return null;
   }
 
   @Override
-  public Object get(Comparable key) throws IllegalArgumentException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'get'");
-  }
-
-  @Override
-  public Object remove(Comparable key) throws IllegalArgumentException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'remove'");
-  }
-
-  @Override
-  public Object find(Predicate searcher) {
+  public V find(Predicate searcher) {
     // index = calculateIndexFor(searcher.get()?);
     // return A[index];
     return null;
@@ -45,32 +83,41 @@ public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer
 
   @Override
   public int size() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'size'");
+    return array.length;
   }
 
   @Override
   public int capacity() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'capacity'");
+    if (array.length > CAPACITY) {
+      return 0;
+    }
+    return CAPACITY;
   }
 
   @Override
   public void ensureCapacity(int capacity) throws OutOfMemoryError, IllegalArgumentException {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'ensureCapacity'");
+    /* if (capacity > capacity()) {
+      
+    } */
   }
 
   @Override
   public void clear() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'clear'");
+    array = null;
   }
 
   @Override
-  public Pair[] toArray() throws Exception {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'toArray'");
+  @SuppressWarnings("unchecked")
+  public Pair<K,V>[] toArray() throws Exception {
+    Pair<K,V>[] returnArray = new Pair[array.length];
+    for (int i = 0; i < array.length; i++) {
+      returnArray[i] = array[i].nodeData;
+    }
+    return returnArray;
   }
   
+  /* private boolean addCapacity(Pair<K,V> [] array) {
+    boolean result = false;
+  } */
+
 }

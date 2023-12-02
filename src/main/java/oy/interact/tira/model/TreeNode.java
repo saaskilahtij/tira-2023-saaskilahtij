@@ -31,7 +31,6 @@ public class TreeNode<K extends Comparable<K>, V> {
   }
 
 
-  // Miksi 11 on 109 oikealla puolella testissä GenericTests rivillä 90
   public boolean insert(TreeNode<K,V> newNode, Comparator<K> comparator) {
     boolean result = false;
 

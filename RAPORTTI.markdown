@@ -179,18 +179,18 @@ arvoiksi sain:
 330884603
 330884596
 ```
-hajautusfunktio ei ollut tarpeeksi hyvä. Kokeilin eri kombinaatioita ja opiskeltuani hajautusfunktioita törmäsin netissä vertailuun, jossa vertailtiin Bernsteinin, sekä Kernighanin ja Ritchien hajautusfunktioita. Myös näissä ammattimaisissa hajautusfunktioissa oli vain pieniä eroja loppukirjaimen muutoksessa. Päädyin lopulta hajautukseen: 
+hajautusfunktio ei ollut tarpeeksi hyvä. Kokeilin eri kombinaatioita ja opiskeltuani hajautusfunktioita törmäsin netissä vertailuun, jossa vertailtiin Bernsteinin, sekä Kernighanin ja Ritchien hajautusfunktioita. Myös näissä ammattimaisissa hajautusfunktioissa oli vain pieniä eroja loppukirjaimen muutoksessa. Tässä vaiheessa älysin hakea hajautusfunktion testidemon ja kokeilemalla päädyin tähän toteutukseen:
 ```Java
 @Override
 	public int hashCode() {
-    int hash = 22;
-    for (int i = 0; i < id.length(); i++) {
-      hash *= (31 * hash) ^ id.charAt(i);
+    int hash = 5381;
+    int length = id.length();
+    for (int index = 0; index < length; index++) {
+      hash = (31 * hash) ^ id.charAt(index);
     }
     return hash;
 	}
 ```
-Tässä hajautuksessa pyrin priorisoimaan hyvää hajautusta, sekä hajautusfunktion suorituskykyä. Koska id:t eivät ole pitkiä, algoritmin aikakompleksisuus O(n) ei ole ongelma.
-
+Hajautusfunktio ei ollut vielä tarpeeksi hyvä, joten ajattelin optimoida sen myöhemmin. Nyt kuitenkin siirryin implementoimaan itse hajautustaulua.
 
 ## 09-TASK

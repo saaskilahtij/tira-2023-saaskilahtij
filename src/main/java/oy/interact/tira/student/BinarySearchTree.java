@@ -15,13 +15,14 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
   Comparator<K> comparator;
   int nodeCount = 0;
   int capacity = Integer.MAX_VALUE; 
-  int maxDepth; // Miksi max depth = 0?
+  int maxDepth;
 
   public BinarySearchTree() {}
 
   public BinarySearchTree(Comparator<K> comparator) {
     this.comparator = comparator;
   }
+
 
   @Override
   public void add(K key, V value) throws OutOfMemoryError, IllegalArgumentException {
@@ -42,6 +43,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
       nodeCount++;
     }
   }
+
 
   @Override
   public V get(K key) throws IllegalArgumentException {
