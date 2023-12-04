@@ -218,20 +218,4 @@ public class Coder implements Comparable<Coder> {
     }
     return hash;
 	}
-
-  public static void main(String[] args) {
-    Coder coder1 = new Coder("Johan", "Sääskilahti", "48954389034");
-    coder1.id = "1233";
-    Coder coder2 = new Coder("Kohan", "Sääskilahti", "48954389034");
-    coder2.id = "1234";
-    Coder coder3 = new Coder("Juhan", "Sääskilahti", "48954389034");
-    coder3.id = "1235";
-    int hash1 = coder1.hashCode();
-    int hash2 = coder2.hashCode();
-    int hash3 = coder3.hashCode();
-    System.out.println(hash1);
-    System.out.println(hash2);
-    System.out.println(hash3);
-  }
-
 }

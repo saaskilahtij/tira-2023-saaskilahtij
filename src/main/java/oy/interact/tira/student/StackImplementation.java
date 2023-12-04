@@ -7,7 +7,7 @@ public class StackImplementation<E> implements StackInterface<E> {
   private static final int DEFAULT_STACK_SIZE = 10;
   
   private Object [] itemArray;
-  int top = -1;
+  private int top = -1;
   
   public StackImplementation() {
     itemArray = new Object[DEFAULT_STACK_SIZE];

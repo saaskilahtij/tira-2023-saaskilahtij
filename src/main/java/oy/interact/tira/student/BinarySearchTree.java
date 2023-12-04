@@ -11,11 +11,11 @@ import oy.interact.tira.model.TreeNode;
 
 public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOrderedContainer<K,V>  {
 
-  TreeNode<K,V> root = null;
-  Comparator<K> comparator;
-  int nodeCount = 0;
-  int capacity = Integer.MAX_VALUE; 
-  int maxDepth;
+  private TreeNode<K,V> root = null;
+  private Comparator<K> comparator;
+  private int nodeCount = 0;
+  private int capacity = Integer.MAX_VALUE; 
+  private int maxDepth;
 
   public BinarySearchTree() {}
 
@@ -56,6 +56,7 @@ public class BinarySearchTree<K extends Comparable<K>, V> implements TIRAKeyedOr
     return root.find(key, comparator);
   }
 
+  
   @Override
   public V remove(K key) throws IllegalArgumentException {
     // TODO Auto-generated method stub

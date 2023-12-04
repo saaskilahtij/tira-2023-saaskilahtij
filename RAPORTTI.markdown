@@ -165,6 +165,32 @@ Funktiokutsut voivat olla hieman miten sattuu, sillä en ehtinyt korjata bugeja 
 
 ## 07-TASK
 
+Tämä tehtävä oli ylivoimaisesti vaikein, mutta debuggauksen ansiosta opin sen melko yksityiskohtaisesti. Vaikeinta ei ollut itse puu, vaan pienet yksityiskohdat sekä verrattain sekavat testit. 
+
+Root solmu määrittää paljon binäärisen hakupuun syvyyttä. Näyttää siltä, että ideaalisessa binäärisessä hakupuussa keskimmäiseksi suurimman arvon ollessa root solmu, puu olisi kaikista tasapainoisin. Puun optimoimiseksi kannattaisi aineisto järjestää ja keskimmäisestä arvosta tehdä root solmu(?). Täysin tasapainoisen binäärisen hakupuun syvyys on logaritminen suhteessa solmujen määrään **D = log2(n)**. Jos puu ei ole tasapainoinen, siihen tehtävät toiminnot hidastuvat - pahin case on puu linkitettynä listana, kun rootiksi laitetaan aineiston pienin tai suurin arvo.
+
+
+Mikä oli sinun toteutuksellasi puun maksimisyvyys (syvimmän haaran syvyys/korkeus) kullakin eri kokoisella aineistolla?
+
+
+Algoritmit toteutin pääosin rekursiivisesti, sillä rekursiiviset rakenteet tuntuivat luonnollisemmalta käsitellessä hakupuuta ja sen solmuja; varsinkin kun abstrahoin solmun TreeNode erilliseksi luokaksi. Ainoa metodi jonka toteutin lapsisolmujen lukumäärän avulla oli ```getIndex()```. Jos tekisin tehtävän uudelleen, todennnäköisesti käyttäisin silti rekursiota. Metodin ```getIndex()``` toteuttaisin lapsisolmujen avulla, sillä tällä algoritmilla solmuja ei tarvitse indeksoida yksitellen, vaan lasten indeksit tiedetään jo.
+
+| Elements (n) | Add Time | Add Time/Item | To Sorted Array Time | Search Time | Search Time/Item | Get(Index) Time | Get(Index) Time/Item | Testfile                     |
+|--------------|----------|---------------|-----------------------|-------------|-------------------|------------------|----------------------|------------------------------|
+| 100          | 1        | 0.0100        | 0                     | 1           | 0.0100            | 1                | 0.0100               | 100-city-coders.json         |
+| 1000         | 1        | 0.0010        | 1                     | 1           | 0.0010            | 0                | 0.0000               | 1000-area-coders.json        |
+| 5000         | 4        | 0.0008        | 0                     | 4           | 0.0008            | 1                | 0.0002               | 5000-town-coders.json        |
+| 10000        | 6        | 0.0006        | 0                     | 6           | 0.0006            | 2                | 0.0002               | 10000-large-city-coders.json |
+| 50000        | 38       | 0.0008        | 1                     | 41          | 0.0008            | 6                | 0.0001               | 50000-country-coders.json    |
+| 100000       | 97       | 0.0010        | 5                     | 100         | 0.0010            | 13               | 0.0001               | 100000-europe-coders.json    |
+
+Puun täyttöaika pysyy vakaana, riippuen puun tasapainosta. Oman puuni aikakompleksisuus lisätessä näytti toteuttavan **log2(n)** aikakompleksisuusluokan - joka on myös puun syvyys. 
+
+Hakualgoritmi käyttää käytännössä samaa logiikkaa lisäämisen kanssa, menemällä syvemmälle puuhun vertailemalla solmuja. Tässäkin aikakompleksisuudeksi saadaan puun syvyys **log2(n)**.
+
+
+
+
 ## 08-TASK
 
 Ensimmäisenä toteutin hajautusfunktion. Tässä tavoitteena oli hajauttaa merkkijono kokonaisluvulliseksi arvoksi mahdollisimman hyvällä entropialla. Olen jo pitkään halunnut oppia bittioperaatioita, joten tehtävä tuntui täydelliseltä haasteelta oppia asia. Opiskelin ja kokeilin ensin yksinkertaisia operaatioita, kuten XOR **^**, AND **&**, OR **|**, sekä bittisiirrot vasemmalle **<<** ja oikealle **>>**. Kuulin että hyvässä hajautusfunktiossa kannattaa käyttää alkulukuja joten valitsin tiivisteen alustukseksi 23 ja kertoimeksi 31. Kun olin jo aika pitkällä hajautusfunktiossa, huomasin, että bittioperaatiot antavat joka kerta eri arvon samalle merkkijonolle. Hikisestä tiedonkeruusta huolimatta en löytänyt vastausta sille miksi. Hieman tämän jälkeen silmäni osui Coder konstruktorin riviin ```id = UUID.randomUUID().toString();```. Tämän jälkeen testailin hajautusfunktion tehokkuutta. Testiaineistolle:

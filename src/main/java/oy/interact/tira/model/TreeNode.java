@@ -22,6 +22,7 @@ public class TreeNode<K extends Comparable<K>, V> {
   TreeNode<K,V> nextNode;
   AtomicInteger indexHelper = new AtomicInteger(-1);
 
+  // Check illegal argument exceptions
 
   public TreeNode() {}
 
