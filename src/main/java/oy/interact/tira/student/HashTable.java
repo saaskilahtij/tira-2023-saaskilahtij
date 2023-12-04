@@ -35,7 +35,7 @@ public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer
       throw new IllegalArgumentException("Given value can not be null");
     }
 
-    ensureCapacity(capacity + 1);
+    ensureCapacity(elementCount);
     int index = calculateIndex(key);
     LinkedListNode<K,V> newNode = new LinkedListNode<>(key, value);
 
@@ -165,13 +165,14 @@ public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer
       throw new IllegalArgumentException("Given capacity can not be negative");
     }
 
-    if (capacity <= capacity) {
+    if (capacity <= this.capacity) {
       return;
     }
 
+    this.capacity *= 2;
     try {
-      LinkedListNode<K,V> [] newlyAllocated = new LinkedListNode[capacity *= 2];
-      for (int i = 0; i < size(); i++) {
+      LinkedListNode<K,V> [] newlyAllocated = new LinkedListNode[this.capacity];
+      for (int i = 0; i < array.length; i++) {
         if (array[i] != null) {
           int newlyAllocatedIndex = calculateIndex(array[i].nodeData.getKey());
           newlyAllocated[newlyAllocatedIndex] = array[i];
@@ -232,7 +233,7 @@ public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer
     if (key == null) {
       throw new IllegalArgumentException("Given key can not be null");
     }
-    return (key.hashCode() % 0x7fffffff) % capacity;
+    return (key.hashCode() & 0x7fffffff) % capacity;
   }
 
 }

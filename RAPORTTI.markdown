@@ -193,6 +193,8 @@ Hakualgoritmi käyttää käytännössä samaa logiikkaa lisäämisen kanssa, me
 
 ## 08-TASK
 
+Hajautusfunktiossa duplikaattien, sekä törmäysten hallinta oli hankalinta. Mielikuvitusta oli myös vaikea löytää hyvään hajautusfunktioon. Optimointi oli myös hankalaa. Toteutustapani wrappaamalla elementit ```LinkedListNode<T,R>``` luokaksi ei varmastikaan ollut optimaalinen. Kuitenkin heti alussa halusin, että hajautustaulu tukee törmäyshallintaa linkitetyllä listalla. 
+
 Ensimmäisenä toteutin hajautusfunktion. Tässä tavoitteena oli hajauttaa merkkijono kokonaisluvulliseksi arvoksi mahdollisimman hyvällä entropialla. Olen jo pitkään halunnut oppia bittioperaatioita, joten tehtävä tuntui täydelliseltä haasteelta oppia asia. Opiskelin ja kokeilin ensin yksinkertaisia operaatioita, kuten XOR **^**, AND **&**, OR **|**, sekä bittisiirrot vasemmalle **<<** ja oikealle **>>**. Kuulin että hyvässä hajautusfunktiossa kannattaa käyttää alkulukuja joten valitsin tiivisteen alustukseksi 23 ja kertoimeksi 31. Kun olin jo aika pitkällä hajautusfunktiossa, huomasin, että bittioperaatiot antavat joka kerta eri arvon samalle merkkijonolle. Hikisestä tiedonkeruusta huolimatta en löytänyt vastausta sille miksi. Hieman tämän jälkeen silmäni osui Coder konstruktorin riviin ```id = UUID.randomUUID().toString();```. Tämän jälkeen testailin hajautusfunktion tehokkuutta. Testiaineistolle:
 ```Java
 coder1.id = "123456";
@@ -218,5 +220,28 @@ hajautusfunktio ei ollut tarpeeksi hyvä. Kokeilin eri kombinaatioita ja opiskel
 	}
 ```
 Hajautusfunktio ei ollut vielä tarpeeksi hyvä, joten ajattelin optimoida sen myöhemmin. Nyt kuitenkin siirryin implementoimaan itse hajautustaulua.
+
+### Hajautustaulun aikatehokkuuksien analyysi
+
+
+Hajautustauluun lisäämisen aikatehokkuus on vakio ***O(1)***, paitsi allokoinnin tapauksessa ***O(n)***, sekä törmäysten tai duplikaattien tapauksessa.
+
+Haun aikatehokkuus taulusta on myös ***O(1)***, paitsi tehottomassa taulussani siihen liittyy linkitetyissä listoissa uiminen, jolloin tehokkuus ei ole optimaalinen.
+
+Kun hajautustaulusta tehdään palautettava taulukko, aikakompleksisuudeksi saadaan ***O(n + taulukon koko)*** koska myös nullit loopataan läpi. Lopulliseksi aikakompleksisuudeksi saadaan ***O(n)***.
+
+### Puolitushaun taulukko vs puu
+
+Taulukkopohjaisessa, kuten puupohjaisessa puolitushaussa haun aikakompleksisuus on aina ***O(log2(n))***, mutta missä nämä tietorakenteet eroavat on lisäyksen sekä poistamisen aikatehokkuudet. Taulukkotietorakenteessa ne ovat yleensä (riippuen toteutuksesta) **O(n)**. Puutietorakenteessa, jos puu on tasapainoinen, nämä molemmat operaatiot ovat ***O(log2(n))***. Tämä on todella merkittävä parannus suurille tietomäärille - esimerkkinä jo pelkästään *2 000 000* kokoiselle aineistolle, jossa taulukosta poistamisen tai lisäämisen suurin mahdollinen operaatioden määrä on satatuhatta kertaa pienempi, vrt. *2 000 000* vs *20*.
+
+
+
+### Hajautustaulu vs normaali taulu
+
+Hajautustauluun lisäämisen aikakompleksisuus on vakio ***O(1)*** operaatio, kun taas normaalin taulukon aikakompleksisuus (riippuen toteutuksesta) on yleensä ***O(n)***; jos taulukon viimeisen indeksin paikka pidetään muistissa, voidaan lisäämisessä saavuttaa ***O(1)***. Hakuaika taulukossa voi vaihdella, mutta siinä ei koskaan päästä ***O(1)*** aikakompleksisuuteen(?). Binäärihaulla haku voidaan suorittaa ***O(log2(n))*** aikakompleksisuudella jos taulukko on järjestetty, muutoin ***O(n)***. Hajautustaulussa haku on usein vakio-operaatio ***O(1)*** laskemalla avaimen tiivisteen avulla taulukon avainta vastaava indeksi. Jos hajautustaulu on epäoptimaalinen, hajautusfunktio hajauttaa arvot huonosti samaan indeksiin, voi aikakompleksisuus pahimmillaan olla ***O(n)***. Hajautustaulun poistaminen käyttää samaa logiikkaa kuin lisääminen ja sen aikakompleksisuus on hyvässä taulussa ***O(1)***.
+
+Hajautustaulu sopii paremmin epäjärjestetyille suuremmille tietomäärille, kun taas taulukko on sopivampi pienemmille järjestetyille tietomäärille. Hajautustaulun järjesteleminen perinteisellä tavalla rikkoo sen logiikkaa, mutta toisaalta voidaan sanoa että hajautustaulu on järjestyksessä hajautusfunktiolla tapahtuvan haun ansiosta. Kuitenkin eri kriteereillä tapahtuvassa järjestelyssä hajautustaulu häviää perinteiselle taulukolle. Perinteistä taulukko kannattaa suosia jos tietoa halutaan järjestellä ja esimerkiksi lukea järjestellysti ohjelmaan suoraan.
+
+
 
 ## 09-TASK
