@@ -8,12 +8,14 @@ import oy.interact.tira.util.TIRAKeyedContainer;
 
 public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer<K,V>{
 
-  
+  // Vika on siinä, että hajautusfunktioon tuleva indeksi on key % capacity,
+  // mutta capacity muuttuu listan suuretessa.
+
   private class LinkedListNode<T,R> {
     Pair<K,V> nodeData;
     LinkedListNode<T,R> nextNode;
     LinkedListNode<K,V> headNode;
-    
+  
     LinkedListNode(K key, V value) {
       nodeData = new Pair<>(key, value);
     }
@@ -34,6 +36,9 @@ public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer
     if (value == null) {
       throw new IllegalArgumentException("Given value can not be null");
     }
+
+    // Kertoo 8:n 128:lla
+    // Menee indeksiin 97
 
     ensureCapacity(elementCount);
     int index = calculateIndex(key);
@@ -176,9 +181,9 @@ public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer
         if (array[i] != null) {
           int newlyAllocatedIndex = calculateIndex(array[i].nodeData.getKey());
           newlyAllocated[newlyAllocatedIndex] = array[i];
-          array = newlyAllocated;
-        }
+        } 
       }
+      array = newlyAllocated;
     } catch (OutOfMemoryError e) {
       throw new OutOfMemoryError("Out of memory when tried allocating more space");
     }
@@ -195,45 +200,30 @@ public class HashTable<K extends Comparable<K>, V> implements TIRAKeyedContainer
 
   @Override
   @SuppressWarnings("unchecked")
-  public Pair<K,V>[] toArray() throws Exception {
-    
+  public Pair<K,V>[] toArray() {
     Pair<K,V>[] returnArray = new Pair[elementCount];
     AtomicInteger returnArrayIndex = new AtomicInteger(0);
-    AtomicInteger initialArrayIndex = new AtomicInteger(0);
+
+    for (int i = 0; i < array.length; i++) {
+    LinkedListNode<K,V> currentNode = array[i];
     
-    // Loops through the array; increment when index gets added, but not when adding linked list
-    while (initialArrayIndex.get() < array.length) {
-      if (array[initialArrayIndex.get()] != null) {
-        if (array[initialArrayIndex.get()].nextNode == null) {
-          returnArray[returnArrayIndex.get()] = array[initialArrayIndex.get()].nodeData;
-          returnArrayIndex.incrementAndGet();
-        } else {
-          arraytisizeLinkedList(returnArray, array[initialArrayIndex.get()], returnArrayIndex);
-        }
+    while (currentNode != null) {
+      returnArray[returnArrayIndex.get()] = currentNode.nodeData;
+      if (returnArrayIndex.get() < array.length) {
+        returnArrayIndex.incrementAndGet();
       }
-      if (array.length > initialArrayIndex.get()) {
-        initialArrayIndex.incrementAndGet();
+      currentNode = currentNode.nextNode;
       }
-    }
-    
-    return returnArray;
-  }
-  
-  private void arraytisizeLinkedList(Pair<K,V> [] array, LinkedListNode<K,V> node, AtomicInteger index) {
-    if (node.nextNode == null) {
-      return;
     }
 
-    array[index.get()] = node.nodeData;
-    index.incrementAndGet();
-    arraytisizeLinkedList(array, node.nextNode, index);
+    return returnArray;
   }
 
   private int calculateIndex(K key) throws IllegalArgumentException {
     if (key == null) {
       throw new IllegalArgumentException("Given key can not be null");
     }
+
     return (key.hashCode() & 0x7fffffff) % capacity;
   }
-
 }
