@@ -2,11 +2,14 @@ package oy.interact.tira.student.graph;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
+import oy.interact.tira.student.QueueImplementation;
 import oy.interact.tira.student.graph.Edge.EdgeType;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -35,15 +38,15 @@ public class Graph<T> {
    /** The edge list of the grap. Select and instantiate
     * a suitable type of Map, depending on application needs.
     */
-   private Map<Vertex<T>, List<Edge<T>>> edgeList = null;
-   
+  private ArrayList<Edge<T>> edgeList = null;
+
    /**
     * Constructor instantiates a suitable Map data structure
     * depending on the application requirements.
     */
-   public Graph() {
-      // TODO: Student: allocate necessary member variables.
-   }
+  public Graph() {
+    edgeList = new ArrayList<Edge<T>>();
+  }
 
    /**
     * Creates a vertex holding the dataItem (node in a vertex) in the graph.
@@ -57,20 +60,22 @@ public class Graph<T> {
     * @param element The data item to put in the vertex of the graph.
     * @return Returns the created vertex, placed in the graph's edge list.
     */
-   public Vertex<T> createVertexFor(T element) {
-      // TODO: Student, implement this.
-      return null;
-   }
+  public Vertex<T> createVertexFor(T element) {
+    return new Vertex<T>(element);
+  }
 
    /**
     * Get all the vertices of the graph in a Set.
 
     * @return A Set with all the vertices of the graph.
     */
-   public Set<Vertex<T>> getVertices() {
-      // TODO: Student, implement this.
-      return null;
-   }
+  public Set<Vertex<T>> getVertices() {
+    Set<Vertex<T>> vertices = new HashSet<>();
+    for (int i = 0; i < edgeList.size(); i++) {
+      vertices.add(edgeList.get(i).getSource());
+    }
+    return vertices;
+  }
 
    /**
     * Adds an edge to the graph. Note that the vertices MUST have been created 
@@ -80,9 +85,14 @@ public class Graph<T> {
     * @param destination The destination vertex of the edge.
     * @param weight The weight of the edge.
     */
-   public void addEdge(Edge.EdgeType type, Vertex<T> source, Vertex<T> destination, double weight) {
-      // TODO: Student, implement this.
-   }
+  public void addEdge(Edge.EdgeType type, Vertex<T> source, Vertex<T> destination, double weight) {
+    createVertexFor(source.getElement());
+    createVertexFor(destination.getElement());
+    Edge<T> edge = new Edge<>(source, destination, weight);
+    Edge<T> edge2 = new Edge<>(destination, source, weight);
+    edgeList.add(edge);
+    edgeList.add(edge2);
+  }
 
    /**
     * Adds a directed edge to the graph. Note that the vertices must have been created 
@@ -92,7 +102,10 @@ public class Graph<T> {
     * @param weight The weight of the edge.
     */
    public void addDirectedEdge(Vertex<T> source, Vertex<T> destination, double weight) {
-      // TODO: Student, implement this.
+    createVertexFor(source.getElement());
+    createVertexFor(destination.getElement());
+    Edge<T> edge = new Edge<>(source, destination, weight);
+    edgeList.add(edge);
    }
 
    /**
@@ -101,10 +114,18 @@ public class Graph<T> {
     * @param source The vertex edges of which we wish to get.
     * @return Returns the edges of the vertex or null if no edges from the source.
     */
-   public List<Edge<T>> getEdges(Vertex<T> source) {
-      // TODO: Student, implement this.
-      return null;
-   }
+  public List<Edge<T>> getEdges(Vertex<T> source) {
+    List<Edge<T>> edges = new ArrayList<>();
+    
+    for (int i = 0; i < edgeList.size(); i++) {
+      Edge<T> edge = edgeList.get(i);
+      if (edge.getSource().equals(source)) {
+        edges.add(edge);
+      }
+    }
+    
+    return edges;
+  }
 
    /**
     * Gets a vertex for the specified node (contents) in a vertex, if found.
@@ -115,8 +136,12 @@ public class Graph<T> {
     * @return The vertex containing the node, or null if no vertex contains the element.
     */
    public Vertex<T> getVertexFor(T element) {
-      // TODO: Student, implement this.
-      return null;
+    for (int i = 0; i < edgeList.size(); i++) {
+      if (edgeList.get(i).getSource().getElement().equals(element)) {
+        return edgeList.get(i).getSource();
+      }
+    }
+    return null;
    }
 
    /**
@@ -127,11 +152,13 @@ public class Graph<T> {
     * @param target An optional ending vertex, null if not given.
     * @return Returns all the visited vertices traversed while doing BFS, in order they were found, or an empty list.
     */
-   public List<Vertex<T>> breadthFirstSearch(Vertex<T> from, Vertex<T> target) {
-      List<Vertex<T>> visited = new ArrayList<>();
-      // TODO: Student, implement this.
-      return visited;
-   }
+  public List<Vertex<T>> breadthFirstSearch(Vertex<T> from, Vertex<T> target) {
+    List<Vertex<T>> visited = new ArrayList<>();
+    QueueImplementation<Vertex<T>> queue = new QueueImplementation<>();
+    queue.enqueue(from);
+    // TODO: Student, implement this.
+    return visited;
+  }
 
    /**
     * Does depth first search (DFS) of the graph starting from a vertex.
@@ -144,11 +171,29 @@ public class Graph<T> {
     * @param target An optional ending vertex, null if not given.
     * @return Returns all the visited vertices traversed while doing DFS.
     */
-   public List<Vertex<T>> depthFirstSearch(Vertex<T> from, Vertex<T> target) {
-      List<Vertex<T>> visited = new ArrayList<>();
-      // TODO: Student, implement this.
-      return visited;
-   }
+  public List<Vertex<T>> depthFirstSearch(Vertex<T> from, Vertex<T> target) {
+    List<Vertex<T>> visited = new ArrayList<>();
+    Stack<Vertex<T>> stack = new Stack<>();
+
+    stack.push(from);
+
+    while (!stack.isEmpty()) {
+      Vertex<T> current = stack.pop();
+
+      if (!visited.contains(current)) {
+        visited.add(current);
+        if (current.equals(target)) {
+          break;
+        }
+        for (Edge<T> edge : getEdges(current)) {
+          Vertex<T> neighbor = edge.getDestination();
+          stack.push(neighbor);
+        }
+      }
+    }
+
+    return visited;
+  }
    
    /**
     * Returns a non-empty list if the graph is disconnected. A disconnected graph is a

@@ -110,6 +110,7 @@ public class UUIDHashTestApp {
         return hash;
     }
 
+
    /*  private static int hashFrom(final String uuid) {
       // TOSI huono, esim 100 000 koodarin aineistolla:
       // STATS: n: 100000, addCollided 99678, Total collision count: 14637312, max probing steps: 563
