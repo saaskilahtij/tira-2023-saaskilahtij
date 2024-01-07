@@ -243,5 +243,74 @@ Hajautustauluun lisäämisen aikakompleksisuus on vakio ***O(1)*** operaatio, ku
 Hajautustaulu sopii paremmin epäjärjestetyille suuremmille tietomäärille, kun taas taulukko on sopivampi pienemmille järjestetyille tietomäärille. Hajautustaulun järjesteleminen perinteisellä tavalla rikkoo sen logiikkaa, mutta toisaalta voidaan sanoa että hajautustaulu on järjestyksessä hajautusfunktiolla tapahtuvan haun ansiosta. Kuitenkin eri kriteereillä tapahtuvassa järjestelyssä hajautustaulu häviää perinteiselle taulukolle. Perinteistä taulukko kannattaa suosia jos tietoa halutaan järjestellä ja esimerkiksi lukea järjestellysti ohjelmaan suoraan.
 
 
-
 ## 09-TASK
+
+Graafi tietorakenteena ei ollut yhtä vaikea mitä binäärinen hakupuu. Johtui ehkä siitä, että solmujen linkittäminen oli tullut niin tutuksi kurssin aikana. Algoritmeista BFS ja DFS olivat suunnilleen yhtä vaikeita ja oli mielenkiintoista hyödyntää jonoa sekä pinoa algoritmien toteutuksessa. Tehtävässä päätin käyttää reunalistan hyödyntämistä ```Hashtable``` tietorakenteessa, jossa avaimena toimivat solmut, ja arvoina sen reunat Javan lista ```List<Edge<T>>``` tietorakenteessa. Päätin toteuttaa suuntaamattoman verkon.
+
+Testien ja oman analyysiini perusteella toteutukseni on oikeellinen. Se luo suuntamattoman verkon ja sen algoritmit toimivat.
+
+Reunuslista eroaa matriisista merkittävästi. Reunuslista on hyvin paljon muistiystävällisempi ***O(n+m)*** vs matriisin tilakompleksisuus ***O(n^2)***. Matriisi on parempi tiheämmille graafeille (enemmän reunoja), koska sen avulla reunojen ja niiden painojen käsittely on tehokaampaa kaksiulotteisten indeksien avulla. Harvassa graafissa (vähän reunoja) matriisi olisi pääosin tyhjä, jolloin kannattaa suosia reunuslistaa. Tärkeä myös huomauttaa, että solmun lisääminen reunuslistaan on aikakompleksisuudeltaan kaunis ***O(1)*** kun taas matriisissa se on ***O(n^2)***. Reunuslistassa reitin löytäminen painon kanssa on matriisia hitaampi aikakompleksisuudeltaan ***O(n)***, kun se on matriisissa nopeat ***O(1)***. Kun käytetään DFS ja BFS algoritmeja, ne toimivat tehokkaammin reunuslistassa sillä tässä iteroidaan ainoastaan olemassaolevat reunat, toisin kuin matriisin tapauksessa, jossa käydään läpi myös olemattomat reunat.
+
+Kun analysiodaan verkon tiheyttä, lasketaan ensin kaikki verkon mahdolliset reunat, joka saadaan kaavalla ```P = V^2```. Eri aineistoille voidaan laskea:
+```
+P = 10^2 = 100
+P = 100^2 = 10000
+P = 1000^2 = 1000000
+P = 5000^2 = 25000000
+P = 10000^2 = 100000000
+```
+Kun verkon testeistä saadaan selville, että jokaista solmua kohden on noin 5 reunaa, voidaan suuntaamattoman verkon tiheys laskea kaavalla ```D = iE / pE```, jossa D tiheys, iE reunojen määrä, sekä pE reunojen maksimimäärä:
+```
+D = 40 / 100 = 0.4
+D = 532 / 10000 = 0.0532
+D = 5613 / 1000000 = 0.005613
+D = 27602 / 25000000 = 0.00110408
+D = 56551 / 100000000 = 0.00056551
+```
+Tästä voidaan nähdä, että graafi on hyvin harva, varsinkin graafin koon kasvaessa ja siksi reunuslista on sille optimaalisempi vaihtoehto. Eli reunuslista on matriisia parempi vaihtoehto kuin matriisi.
+
+```Hashtable``` ja ```HashMap``` erikoisuuksista sen verran, että ```Hashtable``` on synkroninen sen ottaessa haltuun ainoastaan yhden säikeen, kun taas ```HashMap``` on epäsynkroninen ja se kykenee monisäikeisyyteen. Omissa testeissä tällä oli minimaalinen merkitys. 10 000 koodarin aineistolla ```Hashtable``` tietorakenne ylsi BFS haussa aikaan 71.06100 sekuntia, kun taas ```HashMap``` hoiti tämän 63.18 sekuntiin. Suuremmilla aineistoilla monisäikeisyys voisi olla merkittävää, jossa suosittelisin ```HashMap``` tietorakennetta, mutta alle 10 000 aineistoilla sillä ei ole suurta merkitystä.
+
+### Aikatehokkuudet graafeina
+
+### Kaavio verkkoon lisättäessä:
+![Verkon lisäämisen graafi](src/main/resources/images/graph/graph_fill_time.png)
+
+Kun taulukko täytetään reunalistatoteutuksessa, on reunan sekä solmun lisäyksellä sama aikatehokkuus ***O(1)***.
+
+Tässä alla olevassa koodissa tapahtuu reunan lisääminen reunuslistaan. 
+```Java
+public void addEdge(Edge.EdgeType type, Vertex<T> source, Vertex<T> destination, double weight) {
+  if (source == null || destination == null) {
+    return;
+  }
+  List<Edge <T>> edges = edgeList.get(source);
+  edges.add(new Edge<T>(source, destination, weight));
+  edgeList.put(source, edges);
+  edgeCount++;
+  List <Edge<T>> edges2 = edgeList.get(destination);
+  edges2.add(new Edge<T>(destination, source, weight));
+  edgeList.put(destination, edges2);
+  edgeCount++;
+}
+```
+Kun solmun täytyy jo olla olemassa ennen funktiokutsua ```put()``` metodi ainoastaan päivittää sitä. Kuten koodista näkee, reunan lisääminen on vakio. Solmu luodaan jo ennen ```addEdge()``` funktiokutsua kutsumalla ```createVertexFor()``` funktiota ja senkin aikakompleksisuusluokka on vakio ***O(1)***
+```Java
+public Vertex<T> createVertexFor(T element) {
+  Vertex<T> vertex = new Vertex<T>(element);
+  edgeList.put(vertex, new ArrayList<Edge<T>>());
+  vertexCount++;
+  return vertex;
+}
+```
+
+### Kaavio verkosta haettaessa:
+![Verkon hakemisen graafi](src/main/resources/images/graph/graph_search_time.png)
+
+Aloitetaan BFS algoritmin analyysista. Sen aikakompleksisuus riippuu vahvasti solmuista ja reunoista sekä niiden rakenteesta. Reunalistan toteutuksessa aikakompleksisuudeksi saadaan ***O(n+m)***. Tässä algoritmissa jokainen solmu ja jokainen niiden reuna käydään läpi huonoimmassa tapauksessa. 
+
+DFS algoritmin aikakompleksisuus riippuu samankaltaisesti BFS algoritmin kanssa verkon solmuista ja reunoista sekä niiden rakenteesta. Sen aikakompleksisuus on BFS algoritmin kanssa samaa luokkaa ***O(n+m)***.
+
+BFS ja DFS näyttävät olevan yhtä nopeita. Jos kattoo tarkasti, voi oranssin viivan nähdä harmaan alla.
+
+
