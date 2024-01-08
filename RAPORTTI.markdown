@@ -258,25 +258,27 @@ P = 100^2 = 10000
 P = 1000^2 = 1000000
 P = 5000^2 = 25000000
 P = 10000^2 = 100000000
+...
 ```
-Kun verkon testeistä saadaan selville, että jokaista solmua kohden on noin 5 reunaa, voidaan suuntaamattoman verkon tiheys laskea kaavalla ```D = iE / pE```, jossa D tiheys, iE reunojen määrä, sekä pE reunojen maksimimäärä:
+Kun saadaan selville reunojen määrä, voidaan suuntaamattoman verkon tiheys laskea kaavalla ```D = iE / pE```, jossa D tiheys, iE reunojen määrä, sekä pE reunojen maksimimäärä:
 ```
 D = 40 / 100 = 0.4
 D = 532 / 10000 = 0.0532
 D = 5613 / 1000000 = 0.005613
 D = 27602 / 25000000 = 0.00110408
 D = 56551 / 100000000 = 0.00056551
+...
 ```
 Tästä voidaan nähdä, että graafi on hyvin harva, varsinkin graafin koon kasvaessa ja siksi reunuslista on sille optimaalisempi vaihtoehto. Eli reunuslista on matriisia parempi vaihtoehto kuin matriisi.
 
-```Hashtable``` ja ```HashMap``` erikoisuuksista sen verran, että ```Hashtable``` on synkroninen sen ottaessa haltuun ainoastaan yhden säikeen, kun taas ```HashMap``` on epäsynkroninen ja se kykenee monisäikeisyyteen. Omissa testeissä tällä oli minimaalinen merkitys. 10 000 koodarin aineistolla ```Hashtable``` tietorakenne ylsi BFS haussa aikaan 71.06100 sekuntia, kun taas ```HashMap``` hoiti tämän 63.18 sekuntiin. Suuremmilla aineistoilla monisäikeisyys voisi olla merkittävää, jossa suosittelisin ```HashMap``` tietorakennetta, mutta alle 10 000 aineistoilla sillä ei ole suurta merkitystä.
+```Hashtable``` ja ```HashMap``` erikoisuuksista sen verran, että ```Hashtable``` on synkroninen sen ottaessa haltuun ainoastaan yhden säikeen, kun taas ```HashMap``` on epäsynkroninen ja se kykenee monisäikeisyyteen. Testeissä kykeni selvästi näkemään, että ```HashMap``` oli nopeampi. Tämä alkoi näkymään 50 000 koodarin aineistolla, jossa esimerkiksi ```Hashtable``` suoritti BFS haun lähes puolet hitaammin 68929 ms, jossa ```HashMap``` ylsi 39479 millisekuntiin. 100 000 koodarin aineistolla tämä vasta olikin näkyvää - siinä missä ```Hastable``` täytti verkon 3199269 ms (53.32115 minuuttia), ```HashMap``` hoiti sen 2244938 millisekunnissa (37.4156333 minuuttia). 
 
 ### Aikatehokkuudet graafeina
 
 ### Kaavio verkkoon lisättäessä:
-![Verkon lisäämisen graafi](src/main/resources/images/graph/graph_fill_time.png)
+![Verkon lisäämisen graafi](src/main/resources/images/graph/graph_fill_time_hashtable.png)
 
-Kun taulukko täytetään reunalistatoteutuksessa, on reunan sekä solmun lisäyksellä sama aikatehokkuus ***O(1)***.
+Kun taulukko täytetään reunalistatoteutuksessa, on reunan sekä solmun lisäyksellä sama aikatehokkuus ***O(1)***. Graafi ainoastaan näyttää eksponentiaaliselta, koska testiainestojen koko nousee dramaattisesti.
 
 Tässä alla olevassa koodissa tapahtuu reunan lisääminen reunuslistaan. 
 ```Java
@@ -305,12 +307,10 @@ public Vertex<T> createVertexFor(T element) {
 ```
 
 ### Kaavio verkosta haettaessa:
-![Verkon hakemisen graafi](src/main/resources/images/graph/graph_search_time.png)
+![Verkon hakemisen graafi](src/main/resources/images/graph/graph_search_times_hashtable.png)
 
 Aloitetaan BFS algoritmin analyysista. Sen aikakompleksisuus riippuu vahvasti solmuista ja reunoista sekä niiden rakenteesta. Reunalistan toteutuksessa aikakompleksisuudeksi saadaan ***O(n+m)***. Tässä algoritmissa jokainen solmu ja jokainen niiden reuna käydään läpi huonoimmassa tapauksessa. 
 
 DFS algoritmin aikakompleksisuus riippuu samankaltaisesti BFS algoritmin kanssa verkon solmuista ja reunoista sekä niiden rakenteesta. Sen aikakompleksisuus on BFS algoritmin kanssa samaa luokkaa ***O(n+m)***.
 
 BFS ja DFS näyttävät olevan yhtä nopeita. Jos kattoo tarkasti, voi oranssin viivan nähdä harmaan alla.
-
-

@@ -40,7 +40,7 @@ public class Graph<T> {
    /** The edge list of the grap. Select and instantiate
     * a suitable type of Map, depending on application needs.
     */
-  private Hashtable<Vertex<T>, List<Edge<T>>> edgeList = null;
+  private HashMap<Vertex<T>, List<Edge<T>>> edgeList = null;
   private int edgeCount = 0;
   private int vertexCount = 0;
 
@@ -49,7 +49,7 @@ public class Graph<T> {
     * depending on the application requirements.
     */
   public Graph() {
-    this.edgeList = new Hashtable<Vertex<T>, List<Edge<T>>>();
+    this.edgeList = new HashMap<Vertex<T>, List<Edge<T>>>();
   }
 
    /**
